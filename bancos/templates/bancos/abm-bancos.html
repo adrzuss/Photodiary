@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Cuentas</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+    </div>
+    <div class="row">
+        <div class="col-5 card shadow mb-4 mr-5">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Cuentas bancarias y billeteras virtuales</h6>
+            </div>
+            <div class="card-body">
+                <div class='input-group mb-3'>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cuenta</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>    
+                        <tbody>
+                            {% for cuentaBanco in cuentasBancarias %}
+                                <tr>
+                                    <td>{{ cuentaBanco[0] }}</td>
+                                    <td>{{ cuentaBanco[1] }}</td>
+                                    <td> <a class="btn btn-info" href="{{ url_for('bancos_bp.abmBancos', idCuenta = cuentaBanco[0]) }}">Editar</a> </td>
+                                </tr>
+                            {% endfor %}    
+                        </tbody>
+
+                    </table>
+                </div>        
+            </div>
+        </div>        
+        <div class="col-6 card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detalle de cuentas bancarias y billeteras</h6>
+            </div>
+            <div class="card-body">
+                        <form  action="{{ url_for('bancos_bp.abmBancos') }}" method='POST'>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for='idCuenta' class="form-label"># Cuenta:</label>
+                                    <input type='text' class="form-control" id='idCuenta' name='idCuenta' value="{{ datosCuenta[0] }}" readonly>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for='cuenta' class="form-label">Nombre banco/billetera : <span style="color:red">*</span></label>
+                                    <input type='text' class="form-control" id='cuenta' name='cuenta' value="{{ datosCuenta[1] }}" required>
+                                </div>
+                            </div>    
+                            <div class="form-group row">
+                                <div class="col-md-8">
+                                    <label for='nroCuenta' class="form-label">N° cuenta : <span style="color:red">*</span></label>
+                                    <input type='text' class="form-control" id='nroCuenta' name='nroCuenta' value="{{ datosCuenta[2] }}" required>
+                                </div>
+                            </div>    
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label for='cbu' class="form-label">CBU/CVU: <span style="color:red">*</span></label>
+                                    <input type='text' class="form-control" id='cbu' name='cbu' value="{{ datosCuenta[3] }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for='alias' class="form-label">Alias : <span style="color:red">*</span></label>
+                                    <input type='text' class="form-control" id='alias' name='alias' value="{{ datosCuenta[4] }}" required>
+                                </div>
+                            </div>    
+                            
+                            <div class="form-group row">
+                                <a href="{{ url_for('bancos_bp.abmBancos', idCuenta = -1) }}" class="btn btn-primary ml-4 btn-icon-split ml-4">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-file"></i>
+                                    </span>
+                                    <span class="text">Nuevo</span>
+                                </a>
+
+                                <button type='submit' class='btn btn-success btn-icon-split ml-4'> 
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-sd-card"></i>
+                                    </span>
+                                    <span class="text">Grabar</span>
+                                </button>
+
+                                <a href="#" class="btn btn-danger ml-4 btn-icon-split ml-4">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                    <span class="text">Borrar</span>
+                                </a>
+                            </div>    
+
+                            <div class="form-group row mb-3 col-12">
+                                <span style="color:red">* Datos obligatorios </span>  
+                            </div>
+                            
+                        </form>
+            </div>        
+        </div>
+    </div>    
+</div>
+
+
+
+{% endblock contenido %}

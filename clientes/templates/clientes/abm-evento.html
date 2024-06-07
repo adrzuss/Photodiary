@@ -1,0 +1,521 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<style>
+    /* Estilos básicos para la lista de sugerencias */
+    .suggestions {
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    .suggestion-item {
+        padding: 8px;
+        cursor: pointer;
+    }
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos del evento</h6>
+        </div>
+        <div class="card-body">
+            
+        
+            <div class="card-body">
+                <!-- <div class='input-group mb-3'> -->
+                <!--    <div class='input-group-prepend'> -->
+                        <form action="{{ url_for('clientes_bp.abmEvento', _method='POST', idCliente= cliente[0] ) }}" method='POST' id="clientForm" onsubmit="return validarFormasDePago()">
+                            <div class="card mb-3" >
+                                <div class="card-body" style="background-color: rgb(215, 238, 245);">
+                                    <!-- 
+                                        Datos del cliente
+                                    -->
+
+                                    <h5 class="card-title">Datos del cliente</h5>
+
+                                    <div class="form-group row">                    
+                                        <div class="col-sm-2 mb-3 input-group-sm">
+                                            <label for='idcliente' class="form-label"># Cliente:</label>
+                                            <input type='text' class="form-control" id='idCliente' name='idCliente' readonly value="{{ cliente[0] }}">
+                                        </div>
+                                        <div class="col-sm-5 mb-3 input-group-sm">    
+                                            <label for='nombre' class="form-label" >Nombre: </span></label>
+                                            <input type='text' class="form-control" id='nombre' name='nombre' readonly value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-sm-5 mb-3 input-group-sm">
+                                            <label for='apellido' class="form-label">Apellido: </span></label>
+                                            <input type='text' class="form-control" id='apellido' name='apellido' readonly value="{{ cliente[2] }}">
+                                        </div>
+                                    </div>  
+                                    <div class="from-group row">
+                                        <div class="col-sm-3 mb-3 input-group-sm">    
+                                            <label for='celular' class="form-label" >N° Celular: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='celular' name='celular' required value="{{ cliente[3] }}">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 input-group-sm">
+                                            <label for='documento' class="form-label">N° Documento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='documento' name='documento' required value="{{ cliente[4] }}">
+                                        </div>
+                                        <div class="col-sm-6 mb-3 input-group-sm">    
+                                            <label for='contacto' class="form-label" >Contacto:</label>
+                                            <input type='text' class="form-control" id='contacto' name='contacto' placeholder="Quien les dio el contacto" value="{{ cliente[7] }}">
+                                        </div>
+                                    </div>    
+                                    <div class="form-group row">
+                                        <div class="col-sm-8 mb-3 input-group-sm">    
+                                            <label for='domicilio' class="form-label" >Domicilio:<span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='domicilio' name='domicilio' required value="{{ cliente[5] }}">
+                                        </div>
+                                        
+                                    </div>   
+                                    
+                                </div>
+                            </div>    
+                            <!-- 
+                                Datos del evento
+                            -->
+                            <div class="card mb-3" >
+                                <div class="card-body" style="background-color: rgb(227, 241, 219);">
+                                    <h5 class="card-title">Datos del evento</h5>
+                                    <div class="form-group row">                    
+                                        <div class="col-2 mb-3 input-group-sm">    
+                                            <label for='idEvento' class="form-label" ># Evento:</label>
+                                            <input type='text' class="form-control" id='idEvento' name='idEvento' value="{{ evento[0] }}" readonly>
+                                        </div>
+                                        <div class="col-8 mb-3 input-group-sm">    
+                                            <label for='tituloEvento' class="form-label" >Nombre del evento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='tituloEvento' name='tituloEvento' required value="{{ evento[2] }}">
+                                        </div>
+                                    </div>    
+                                    
+                                    <div class="form-group row">                    
+                                        <div class="col-3 mb-3 input-group-sm">
+                                            <label for='tipoEvento' class="form-label">Tipo evento: <span style="color:red">*</span></label>
+                                            <select id="tipoEvento" name="tipoEvento" class="form-control" required>
+                                                <option value="" selected disabled>Tipo de evento</option>
+                                                <!-- el tipo de evento es el campo 1 -->
+                                                {% for tipoEvento in tipoEventos %}
+                                                    <option value={{ tipoEvento[0] }}>{{ tipoEvento[1] }}</option>  
+                                                {% endfor %}
+                                              </select>
+                                        </div>
+                                        <div class="col-2 mb-3 input-group-sm">    
+                                            <label for='fechaEvento' class="form-label" >Fecha del evento: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='fechaEvento' name='fechaEvento' required value="{{ evento[4] }}">
+                                        </div>
+                                        <div class="col-2 mb-3 input-group-sm">    
+                                            <label for='horaEvento' class="form-label" >Hora del evento: <span style="color:red">*</span></label>
+                                            <input type='time' class="form-control" id='horaEvento' name='horaEvento' required value="{{ evento[5] }}">
+                                        </div>
+                                        <div class="col-3 mb-3 input-group-sm">    
+                                            <label for='lugarEvento' class="form-label" >Lugar del evento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='lugarEvento' name='lugarEvento' required value="{{ evento[3] }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <div class="col-12 mb-3 input-group-sm">    
+                                            <label for='observaciones' class="form-label" >Observaciones:</label>
+                                            <textarea class="form-control" id='observaciones' name='observaciones' placeholder="Observaciones adicionales a los datos del cliente" maxlength="250">{{evento[6]}}</textarea>  
+                                        </div>
+                                    </div>   
+                                  
+                                </div>
+                            </div>
+
+                            {% if controlProductos == 'S' %}
+                                <div class="card mb-3" >
+                                    <div class="card-body" style="background-color: rgb(249, 231, 250);">
+                                        <h5 class="card-title">Datos de facturación</h5>
+                                    
+                                        <div class="row clearfix">
+                                            <!-- busqueda de productos -->
+                                            <div class="row m-3 col-12 input-group-sm">
+                                                <label for="productSearch">Buscar producto:</label>
+                                                <input class="form-control" type="text" id="productSearch" name="productSearch" oninput="fetchProductSuggestions()" autocomplete="off">
+                                                <div id="suggestions" class="suggestions"></div><br><br>
+
+                                            </div>    
+
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3 input-group-sm">
+                                                    <label class="form-label" for="idProducto">Código producto:<span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" id="idProducto" name="idProducto">
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button type="button" onclick="agregarFila()" class="btn btn-primary">Agregar Artículo</button><br><br>
+                                                </div>    
+                                            </div>    
+                                            <br>
+                                            
+                                            <div class="col-md-12">
+                                                <!-- <table class="table table-bordered table-hover" id="tab_logic"> -->
+                                                <table class="table table-striped" id="tabla-articulos">
+                                                    <input type="hidden" name="item_nos" id="item_nos" value="1">
+                                                    <col width="10%">
+                                                    <col width="15%">
+                                                    <col width="25%">
+                                                    <col width="15%">
+                                                    <col width="20%">
+                                                    <col width="10%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center"> #Id </th>
+                                                            <th class="text-center"> Código </th>
+                                                            <th class="text-center"> Detalle </th>
+                                                            <th class="text-center"> Cantidad </th>
+                                                            <th class="text-center"> Precio unit. </th>
+                                                            <th class="text-center"> Acción </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody">
+                                                        <!-- Aquí se agregarán las filas dinámicamente -->
+                                                        <tr style="display:none">
+                                                            <td><input type="text" name="idProducto[]"></td>
+                                                            <td><input type="text" name="codProducto[]"></td>
+                                                            <td><input type="text" name="descripcion[]"></td>
+                                                            <td><input type="number" name="cantidad[]" onchange="calcularTotal()"></td>
+                                                            <td><input type="number" name="precio-unitario[]" onchange="calcularTotal()"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div><span style="color:red;font-weight:bold;font-size:150%">Total $ </span> 
+                                                <input type="number" class="form-control" name="total" id="total" readonly>
+                                            </div>
+                                        </div>
+                                        <!--
+                                        <div class="row clearfix float-start">
+                                            <div class="col-md-12">
+                                                <button type="button" id="add_row" class="btn btn-primary">Nuevo artículo</button>
+                                                <button type="button" id='delete_row' class="btn btn-danger">Borrar fila</button>
+                                            </div>
+                                        </div>
+                                        -->
+                                    </div>
+                                </div>    
+                            {% else %}    
+                                <div class="card mb-3" style="background-color: rgb(249, 231, 250);">
+                                    <div class="card-body" >
+                                        <h5 class="card-title">Importe total de facturación</h5>
+                                    </div>    
+                                    <div class="col-3 mb-3 input-group-sm">    
+                                        <label for='total' class="form-label" >Valor total del evento: <span style="color:red">*</span></label>
+                                        <input type='text' class="form-control" id='total' name='total' required>
+                                    </div>
+                                </div>    
+                            {% endif %}
+                            <div class="card mb-3" >
+                                <div class="card-body" style="background-color: rgb(219, 242, 247);">
+                                    <h5 class="card-title">Formas de pago</h5>
+                                    
+                                
+                                    <div class="form-group row">                    
+                                        <div class="col-3 mb-3 input-group-sm">    
+                                            <label for='efectivo' class="form-label" >Pago efectivo: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='efectivo' name='efectivo' required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-2 mb-3 input-group-sm">    
+                                            <label for='cuotas' class="form-label" >Cant. cuotas: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='cuotas' name='cuotas' required value="{{ evento[2] }}">
+                                        </div>
+                                        <div class="col-2 mb-3 input-group-sm">    
+                                            <label for='intCuotas' class="form-label" >Interes cuotas: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='intCuotas' name='intCuotas' required value="{{ evento[2] }}">
+                                        </div>
+                                        <div>
+                                            <button type="button" class="mb-3 mt-4 btn btn-secondary" onclick="calcularValorCuotas()">Calcular Cuotas</button>
+                                        </div>
+                                        <div class="col-3 mb-3 input-group-sm">    
+                                            <label for='vtoCuota' class="form-label" >Vencimiento 1° cuota: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='vtoCuota' name='vtoCuota' required >
+                                        </div>
+                                    </div> 
+                                    <div class="form-group row">
+                                        <div class="col-3 mb-3 input-group-sm">    
+                                            <label for='impNetoCuotas' class="form-label" >Importe neto cuotas: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='impNetoCuotas' name='impNetoCuotas' required >
+                                        </div>
+                                        <div class="col-3 mb-3 input-group-sm">    
+                                            <label for='impCuotas' class="form-label" >Importe cuotas: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='impCuotas' name='impCuotas' required >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+
+                            <div class="form-group row mb-3">
+                            <span style="color:red">* Datos obligatorios </span>  
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Genera evento</button>
+                            <button type="button" id="borrarCliente" class="btn btn-danger">Borrar Evento</button>
+                            
+                            
+                        </form>
+                <!--  </div>    -->
+                <!-- </div> -->
+            </div>        
+    
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+
+    var modalUrl = "{{ url_for('static', filename='modal-busqueda.html') }}";  
+    
+    function cargarVentanaModal() {
+        fetch(modalUrl)
+        .then(response => response.text())
+        .then(data => {
+          document.body.insertAdjacentHTML('beforeend', data);
+          // Una vez que se carga el HTML de la ventana modal, puedes inicializarla si es necesario
+          // Por ejemplo, si estás utilizando Bootstrap, podrías inicializarla con $('#resultadosModal').modal()
+        })
+        .catch(error => console.error('Error al cargar la ventana modal:', error));
+    }
+    document.addEventListener('DOMContentLoaded', cargarVentanaModal);
+
+    function busca(codigo) {
+        fetch('/buscarProductos/codigo/' + codigo, {
+                method: 'GET'
+              })
+            .then(response=>{
+                if (!response.ok) {
+                    throw new Error('Error al procesar busqueda');
+                }
+                return response.json();
+            })
+            .then(data =>{
+                console.log('los datos');
+                console.log(data);
+                mostrarResultados(data);
+            })  
+        };    
+
+    
+    function agregarFila() {
+        var idArticulo = document.getElementById('idProducto').value;
+        //idArticulo = idArticulo.padStart(8, '0');
+        fetch('{{ url_for("productos_bp.get_producto_codigo", codigo="") }}'+ idArticulo)
+            .then(response => response.json())
+            .then(data => {
+                var table = document.getElementById('tabla-articulos');
+                var row = table.insertRow(-1);
+                console.log('los datos son');
+                console.log(data);
+                console.log('fin de datos');
+                if (data['error']) {
+                    throw new Error('Producto no encontrado');
+                }
+                else{
+                    document.getElementById('idProducto').value = '';
+                    row.innerHTML = `
+                        <tr id="addr0">
+                            <td>
+                                <input type="text" placeholder='#Id'
+                                    class="form-control" required readonly value="${data['id']}" name="idProducto[]"/>
+                            </td>
+                            <td>
+                                <input type="text" placeholder='Código'
+                                    class="form-control" required value="${data['codigo']}" name="codProducto[]"/>
+                            </td>
+                            <td>
+                                <input type="text" name='detalle' placeholder='Detalle'
+                                    class="form-control" required value="${data['descripcion']}"/>
+                            </td>
+                            <td>
+                                <input type="number" name='cantidad[]' placeholder='Cantidad'
+                                    class="form-control desc" id='cantidad' value="1" required onchange="calcularTotal()" />
+                            </td>
+                            <td>
+                                <input type="number" name='precio-unitario[]' placeholder='Precio unitario'
+                                    class="form-control cat" id="precio-unitario" value="${data.precio}" required onchange="calcularTotal()" />
+                            </td>
+                        </tr>
+                        
+                        <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    `;
+                    calcularTotal();
+                }
+            })
+            .catch(error => console.error('Error al obtener los detalles del artículo:', error));
+        calcularTotal();    
+    }
+
+//------------------------------------------------------------------------------    
+    
+    // Manejo del formulario de búsqueda
+    // Función para mostrar los resultados en la ventana modal
+    function mostrarResultados(resultados) {
+    // Verificar si hay más de un resultado
+        if (resultados.producto.length > 1) {
+            // Obtener el elemento de la lista de resultados
+            //alert('Se encontró mas de un resultado: ' + resultados.cliente.length);
+            var resultadosLista = document.getElementById('resultadosLista');
+            // Limpiar la lista antes de agregar los nuevos resultados
+            resultadosLista.innerHTML = '';
+            // Iterar sobre los resultados y agregar cada uno como un elemento de la lista
+            resultados.producto.forEach(function(resultado) {
+                var li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = resultado[0] + ' - Cod: ' + resultado[1] + ' - ' + resultado[2];
+                li.addEventListener('click', function() {
+                    // Aquí puedes manejar la selección del resultado (por ejemplo, redirigir a una página o realizar otra acción)
+                    //alert('Seleccionaste el cliente: ' + resultado[1] + ', ' + resultado[2]);
+                    obtenerDatosProducto(resultado[0]);
+                    // Cerrar la ventana modal después de seleccionar un resultado
+                    $('#resultadosModal').modal('hide');
+                });
+                resultadosLista.appendChild(li);
+            });
+            // Mostrar la ventana modal con los resultados
+            $('#resultadosModal').modal('show');
+        } else {
+            // Si hay un solo resultado, puedes realizar una acción directamente (por ejemplo, redirigir a una página o mostrar información)
+            obtenerDatosProducto(resultados.producto[0]);
+        }
+
+    }
+  
+    function obtenerDatosProducto(idProducto){
+        fetch('/getProducto/' + idProducto, {
+                method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar datos del producto');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            console.log(data.producto[0]);
+            document.getElementById('idProducto').value = data.producto[0][1];
+        })  
+    }
+
+//--------------------------------------------------------------------------
+
+function calcularTotal() {
+    let total = 0;
+    const filas = document.querySelectorAll('#tabla-articulos tbody tr');
+
+    filas.forEach(fila => {
+        const cantidad = parseFloat(fila.querySelector('input[name="cantidad[]"]').value) || 0;
+        const precio = parseFloat(fila.querySelector('input[name="precio-unitario[]"]').value) || 0;
+        total += cantidad * precio;
+    });
+
+    document.getElementById('total').value = total.toFixed(2);
+}
+
+    // Función para eliminar una fila de la tabla
+    function eliminarFila(button) {
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    function calcularValorCuotas() {
+        // Obtener los valores de los campos de entrada
+        var total = parseFloat(document.getElementById('total').value);
+        var efectivo = parseFloat(document.getElementById('efectivo').value);
+        var cuotas = parseInt(document.getElementById('cuotas').value);
+        var interes = parseFloat(document.getElementById('intCuotas').value);
+        console.log(total)
+        console.log(efectivo)
+        console.log(cuotas)
+        console.log(interes)
+        // Verificar que los valores obtenidos sean números válidos
+        if (isNaN(total) || isNaN(efectivo) || isNaN(cuotas) || isNaN(interes) || cuotas <= 0) {
+            alert("Por favor, ingrese valores numéricos válidos en todos los campos.");
+            return false;
+        }
+
+        // Calcular el saldo restante después de restar el efectivo del total
+        var saldoRestante = total - efectivo;
+
+        // Calcular el valor de cada cuota
+        var valorNetoCuota = saldoRestante / cuotas;
+        var valorCuota = valorNetoCuota + (valorNetoCuota * interes / 100)
+
+        // Actualizar el campo del valor de las cuotas
+        document.getElementById('impNetoCuotas').value = valorNetoCuota.toFixed(2);
+        document.getElementById('impCuotas').value = valorCuota.toFixed(2);
+
+        return true;
+    }
+
+    function validarFormasDePago() {
+        var total = parseFloat(document.getElementById('total').value);
+        var pagoEfectivo = parseFloat(document.getElementById('efectivo').value);
+        var cuotas = parseFloat(document.getElementById('cuotas').value);
+        var intCuotas = parseFloat(document.getElementById('intCuotas').value);
+        var impCuotas = parseFloat(document.getElementById('impCuotas').value);
+    
+        var totalCuotas = cuotas * impCuotas;
+        var sumaFormasDePago = pagoEfectivo + totalCuotas;
+    
+        if (sumaFormasDePago < total) {
+            alert("La suma de las formas de pago no cubre el total del evento.");
+            return false; // Evita el envío del formulario
+        }
+        return true; // Permite el envío del formulario
+    }
+
+
+    async function fetchProductSuggestions() {
+        const query = document.getElementById('productSearch').value;
+        const suggestionsDiv = document.getElementById('suggestions');
+
+        if (query.length < 2) {
+            suggestionsDiv.innerHTML = '';
+            return;
+        }
+
+        // Llama a tu API para obtener las sugerencias de productos
+        const response = await fetch(`consultaProductos?query=${query}`);
+        console.log(response)
+        const suggestions = await response.json();
+        console.log(suggestions)
+        suggestionsDiv.innerHTML = '';
+        suggestions.forEach(product => {
+            const div = document.createElement('div');
+            div.classList.add('suggestion-item');
+            div.textContent = `${product[2]} (Código: ${product[1]})`;
+            div.onclick = () => selectProduct(product);
+            suggestionsDiv.appendChild(div);
+        });
+    }
+
+    function selectProduct(product) {
+        document.getElementById('idProducto').value = product[1];
+        document.getElementById('productSearch').value = product[2];
+        document.getElementById('suggestions').innerHTML = '';
+    }
+
+    </script>
+    
+{% endblock js_script %}
+

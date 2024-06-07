@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de clientes</h6>
+        </div>
+        <div class="card-body">
+                    <form id="searchForm">
+                        <div class="form-row mb-3">
+                            <div class="col-md-2 mb-3">
+                                <label for="desde">Desde</label>
+                                <input type="date" id="desde" name="desde" class="form-control" value="{{ desde }}">
+                            </div>    
+                            <div class="col-md-2 mb-3">
+                                <label for="hasta">Hasta</label>
+                                <input type="date" id="hasta" name="hasta" class="form-control" value="{{ hasta }}">
+                            </div>    
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+                </div>    
+    </div>
+</div>    
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de citas</h6>
+        </div>
+    
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <colgroup span="1" style="background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(200, 100, 0, 0.3);"></colgroup>
+                <colgroup span="2" style="background: rgba(116, 190, 116, 0.15); border: 1px solid rgba(100, 200, 0, 0.3);"></colgroup>
+                <colgroup span="1" style="background: rgba(245, 40, 145, 0.15); border: 1px solid rgba(200, 100, 0, 0.3)"></colgroup>
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Cliente</th>
+                        <th>Celular</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tfoot class="thead-dark">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Cliente</th>
+                        <th>Celular</th>
+                        <th>Acción</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                    <td> {{ cliente[0] }} </td>   
+                    <td>{{ cliente[1] }}, {{ cliente[2] }}</td>
+                    <td>{{ cliente[3] }}</td>
+                    <td> <a class="btn btn-info" href="{{ url_for('clientes_bp.abmClientes', id=cliente[0]) }}">Editar</a> </td>
+                    </tr>
+                    {% endfor %}  
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+    
+{% endblock js_script %}
+

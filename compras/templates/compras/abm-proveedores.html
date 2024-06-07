@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">ABM de ordenes de compras</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+    </div>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="d-flex flex-column align-items-center" id="form-factura" onsubmit="guardarOrdenCompras(); return false;">
+    <small class=" float-start"><span style="color: red;">*</span> Los campos marcado, son obligatorios.</small>
+    <div class=" container m-1">
+        <div class="card">
+            <h5 class="card-header">Datos del proveedor</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label">ID Proveedor </label>
+                            <input type="text" class="form-control" name="idProveedor" id="idProveedor" placeholder="Id del proveedor" readonly>
+                        </div>
+                    </div>    
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="form-label">Nombre Proveedor <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" name="nombreProveedor" id="nombreProveedor" placeholder="Nombre del proveedor" required>
+                        </div>    
+                        <div class="col-6">
+                            <label class="form-label">Nombre fantasía <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" name="nFantasia" id="idProveedor" placeholder="Nombre de fantasía" required>
+                        </div>
+                    </div>    
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label">Resp. IVA <span style="color: red;">*</span></label>
+                            <select name="ctrib" id="ctrib" class="form-control" placeholder="Responsabilidad de IVA" required>
+                                <option value="RI">Resp. Inscripto</option>
+                                <option value="Ex">Exento</option>
+                                <option value="MTB">Monotributo</option>
+                              </select>
+                        </div>    
+                        <div class="col-3">
+                            <label class="form-label">Tipo doc. <span style="color: red;">*</span></label>
+                            <select name="tdoc" id="tdoc" class="form-control" placeholder="Tipo documento" required>
+                                <option value="06">CUIT</option>
+                                <option value="01">DNI</option>
+                                <option value="08">Pasaporte</option>
+                              </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">N° CUIT<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" name="cuit" id="cuit" placeholder="N° de CUIT" required>
+                        </div>
+                    </div>    
+                </div>
+                <div class="col-4">
+                    <button type="button" onclick="buscarProveedor()" class="btn btn-primary">Agregar Proveedor</button><br><br>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="container m-5 d-flex justify-content-center">
+        <!--
+        <button type="submit" class="btn btn-success" onclick="guardarOrdenCompras(); return false;">Generar orden de compras</button>
+        -->
+        <button type="submit" class="btn btn-success" >Generar orden de compras</button>
+    </div>
+</form>    
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+        // Funcion para buscar proveedor
+        function buscarProveedor(){
+            var idProveedor = document.getElementById('idProveedor').value;
+            idProveedor = idProveedor.padStart(8, '0');
+            console.log(idProveedor);
+            fetch('{{ url_for("compras_bp.get_proveedor", idProveedor="") }}' + idProveedor)
+                .then(response => response.json())
+                .then(
+                    data => { 
+                        console.log(data)
+                        var nombreProveedor = document.getElementById('nombreProveedor');
+                        nombreProveedor.value = data.nombreProveedor;
+
+                    }
+                )
+                .catch(error => console.error('Error al obtener los datos del proveedor:', error));
+        }
+        
+    </script>
+    
+
+{% endblock js_script %}

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Photo diary - Administración</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <link href="/static/nova/css/nova.pref.css" rel="stylesheet" type="text/css">
+
+</head>
+ 
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <!--
+        <ul class="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion" id="accordionSidebar">
+        -->    
+        <ul class="navbar-nav sidebar sidebar-dark accordion bg-color-mediumblue" id="accordionSidebar" >
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-camera-retro"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Photo<sup>Diary</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('tablero') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Tablero</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Ventas
+            </div>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCreditos"
+                    aria-expanded="true" aria-controls="collapseCreditos">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Clientes</span>
+                </a>
+                <div id="collapseCreditos" class="collapse" aria-labelledby="headingCreditos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Opciones de clientes:</h6>
+                        <a class="collapse-item" href="{{ url_for('clientes_bp.abmClientes') }}">ABM de clientes</a>
+                        <a class="collapse-item" href="{{ url_for('clientes_bp.listadoClientes') }}">Listados de clientes</a>
+                        <a class="collapse-item" href="{{ url_for('clientes_bp.listadoCitas') }}">Listado de citas</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVentas"
+                    aria-expanded="true" aria-controls="collapseVentas">
+                    <i class="fas fa-fw fa-wallet"></i>
+                    <span>Eventos</span>
+                </a>
+                <div id="collapseVentas" class="collapse" aria-labelledby="headingVentas"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Ventas de artículos:</h6>
+                        <a class="collapse-item" href="#">ABM eventos</a>
+                        <a class="collapse-item" href="{{ url_for('clientes_bp.listadoEventos') }}">Listado de eventos</a>
+                        <a class="collapse-item" href="{{ url_for('clientes_bp.abmTipoEventos') }}">Tipo de eventos</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCalendario"
+                    aria-expanded="true" aria-controls="collapseCalendario">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>Calendario</span>
+                </a>
+                
+                <div id="collapseCalendario" class="collapse" aria-labelledby="headingCalendario"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Calendario:</h6>
+                        <a class="collapse-item" href="{{ url_for('calendario_bp.calendario') }}">Ver calendario</a>
+                    </div>
+                </div>
+                
+            </li>
+            
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Finanzas
+            </div>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
+                    aria-expanded="true" aria-controls="collapseFinanzas">
+                    <i class="fas fa-fw fa-money-bill"></i>
+                    <span>Ingresos</span>
+                </a>
+                <div id="collapseFinanzas" class="collapse" aria-labelledby="headingIngresos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Ingresos</h6>
+                        <a class="collapse-item" href="{{ url_for('ventas_bp.facturasVentas') }}">Facturas</a>
+                        <a class="collapse-item" href="{{ url_for('ventas_bp.pagosPendientes') }}">Pagos pendientes</a>
+                        <a class="collapse-item" href="{{ url_for('ventas_bp.pagosRealizados') }}">Pagos realizados</a>
+                        
+                    </div>
+                </div>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGastos"
+                    aria-expanded="true" aria-controls="collapseGastos">
+                    <i class="fas fa-fw fa-comments-dollar"></i>
+                    <span>Gastos</span>
+                </a>
+                <div id="collapseGastos" class="collapse" aria-labelledby="headingGastos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Gastos</h6>
+                        <a class="collapse-item" href="{{ url_for('en_construccion') }}">Comprobantes</a>
+                        
+                    </div>
+                </div>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBancos"
+                    aria-expanded="true" aria-controls="collapseBancos">
+                    <i class="fas fa-fw fa-wallet"></i>
+                    <span>Bancos</span>
+                </a>
+                <div id="collapseBancos" class="collapse" aria-labelledby="headingBancos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Bancos y billeteras</h6>
+                        <a class="collapse-item" href="{{ url_for('bancos_bp.abmBancos') }}">ABM bancos y billeteras</a>
+                        <a class="collapse-item" href="{{ url_for('bancos_bp.listadoMovimientos') }}">Listado de movimientos</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Divider -->
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Productos
+            </div>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProductos"
+                    aria-expanded="true" aria-controls="collapseProductos">
+                    <i class="fas fa-fw fa-cart-plus"></i>
+                    <span>Productos</span>
+                </a>
+                <div id="collapseProductos" class="collapse" aria-labelledby="headingProdutos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Productos</h6>
+                        <a class="collapse-item" href="{{ url_for('productos_bp.abmProductos') }}">ABM Productos</a>
+                        <a class="collapse-item" href="{{ url_for('productos_bp.abmGrupos') }}">ABM Grupos</a>
+                        <a class="collapse-item" href="{{ url_for('productos_bp.abmMarcas') }}">ABM Marcas</a>
+                    </div>
+                    
+                </div>
+                <div id="collapseProductos" class="collapse" aria-labelledby="headingProductos"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Listados</h6>
+                        <a class="collapse-item" href="{{ url_for('en_construccion')}}">Articulos</a>
+                        <a class="collapse-item" href="{{ url_for('en_construccion')}}">Estadísticas</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message -->
+            <div class="sidebar-card d-none d-lg-flex">         
+                <img class="sidebar-card-illustration mb-2" src="/static/img/logo_afs.svg" alt="...">
+                <p class="text-center mb-2"><strong>Desarrollador por</strong> Adrian Zussino web</p>
+                <a class="btn btn-primary btn-sm" href="https://adrianzussino.com">Visite nuestra página</a>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+            
+                    <!-- Topbar Search -->
+                    <div class="row">
+                        <h3 style = "color:#10246a">Empresa: {{session['empresa']}} </h3> <h3> - </h3> <h3 style="color:#841b2d"> Usuario: {{ session['user_id']}} - {{ session['usr_name']}}</h3>
+                    </div>
+                    
+
+                    <!--
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..."
+                                aria-label="Buscar" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    -->
+            
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+            
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+            
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Centro de Alertas
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Fecha de alerta</div>
+                                        <span class="font-weight-bold">Mensaje alerta 1</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Fecha de alerta</div>
+                                        Mensaje alerta 2
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Fecha de alerta</div>
+                                        Mensaje alerta 3
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las alertas</a>
+                            </div>
+                        </li>
+            
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter">7</span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Centro de Mensajes
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="/static/img/undraw_profile_1.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div class="font-weight-bold">
+                                        <div class="text-truncate">Asunto del mensaje 2</div>
+                                        <div class="small text-gray-500">Usuario 1 · Dias del mensaje</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="/static/img/undraw_profile_2.svg"
+                                            alt="...">
+                                        <div class="status-indicator"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Asunto del mensaje 2</div>
+                                        <div class="small text-gray-500">Usuario 2 · Dias del mensaje</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="/static/img/undraw_profile_3.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-warning"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Asunto del mensaje 3</div>
+                                        <div class="small text-gray-500">Usuario 3 · Dias del mensaje</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Asunto del mensaje 4...</div>
+                                        <div class="small text-gray-500">Usuario 4 · Dias/semanas del mensaje</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                            </div>
+                        </li>
+            
+                        <div class="topbar-divider d-none d-sm-block"></div>
+            
+                        <!-- Nav Item - User Information  -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> {{ session['user'] }}</span>
+                                {% if (('avatar' in session) and (session['avatar'] != None)) %}
+                                    <img class="img-profile rounded-circle" src="/static/img/{{session['user_id']}}/{{session['avatar']}}">
+                                {% else %}    
+                                    <img class="img-profile rounded-circle" src="/static/img/undraw_profile.svg">
+                                {% endif %}
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="{{ url_for('usuarios_bp.perfil') }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Perfil
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('configuracion_bp.abmConfiguracion') }}">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Opciones
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('configuracion_bp.configInformes') }}">
+                                    <i class="fas fa-bars fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Configuración de informes
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ url_for('accesos_bp.logout') }}" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Finalizar sesión
+                                </a>
+                            </div>
+                        </li>
+            
+                    </ul>
+            
+                </nav>
+                <!-- End of Topbar -->
+
+                <div class="row">
+                    <div class="container">
+                        {% with messages = get_flashed_messages(with_categories = 'true') %}
+                        {% if messages %}
+                            {% for category, msg in messages %}
+                            {% if category == "error" %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{msg}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                {{msg}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}  
+                            {% endfor %}
+                        {% endif %}
+                        {% endwith %}  
+                    
+                    </div>
+                </div>    
+                
+            {% block contenido %}
+            
+            {% endblock %}
+            <!-- End of Main Content -->
+        </div>    
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Adrian Zussino WEB 2024</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">¿Finalizar la sesión?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Seleccione "Salir" para finalizar la sesión y salir.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary" href="{{ url_for('accesos_bp.logout') }}">Salir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/static/js/sb-admin-2.min.js"></script>
+
+    {% block js_script %}
+        
+    {% endblock %}
+  
+
+</body>
+
+</html>

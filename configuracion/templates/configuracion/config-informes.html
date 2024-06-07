@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Configuración</h6>
+        </div>
+        
+    </div>
+</div>    
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Configuración de recibo</h6>
+        </div>
+        <form action="#" method="post">
+            <div class="m-3">
+                <div class="form-group row">
+                    <div class="col-md-2 input-group-sm">
+                        <label for="clientex" class="form-label">Cliente mm X</label>
+                        <input type="text" class="form-control" id="clientex" name="clientex">
+                    </div>
+                    <div class="col-md-2 input-group-sm">    
+                        <label for="clientey" class="form-label">Cliente mm Y</label>
+                        <input type="text" class="form-control" id="clientey" name="clientey">
+                    </div>    
+                
+                    <div class="col-md-2 input-group-sm">
+                        <label for="fechax" class="form-label">Fecha mm X</label>
+                        <input type="text" class="form-control" id="fechax" name="fechax">
+                    </div>
+                    <div class="col-md-2 input-group-sm">    
+                        <label for="fechay" class="form-label">Fecha mm Y</label>
+                        <input type="text" class="form-control" id="fechay" name="fechay">
+                    </div>    
+
+                    <div class="col-md-2 input-group-sm">
+                        <label for="eventox" class="form-label">Detalle mm X</label>
+                        <input type="text" class="form-control" id="eventox" name="eventox">
+                    </div>
+                    <div class="col-md-2 input-group-sm">    
+                        <label for="eventoy" class="form-label">Detalle mm Y</label>
+                        <input type="text" class="form-control" id="eventoy" name="eventoy">
+                    </div>
+                </div>    
+                <div class="form-group row">
+                    <div class="col-md-2 input-group-sm">
+                        <label for="cuotax" class="form-label">Cuota mm X</label>
+                        <input type="text" class="form-control" id="cuotax" name="cuotax">
+                    </div>
+                    <div class="col-md-2 input-group-sm">    
+                        <label for="cuotay" class="form-label">Cuota mm Y</label>
+                        <input type="text" class="form-control" id="cuotay" name="cuotay">
+                    </div>
+
+                    <div class="col-md-2 input-group-sm">
+                        <label for="pagox" class="form-label">Pago mm X</label>
+                        <input type="text" class="form-control" id="pagox" name="pagox">
+                    </div>
+                    <div class="col-md-2 input-group-sm">    
+                        <label for="pagoy" class="form-label">Pago mm Y</label>
+                        <input type="text" class="form-control" id="pagoy" name="pagoy">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-success m-3">Grabar recibo</button>
+                </div>
+            </div>
+        </form>
+        <form action="#" method="post">
+
+        </form>
+                
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+    
+{% endblock js_script %}

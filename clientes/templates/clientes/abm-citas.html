@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos de la nueva citas</h6>
+        </div>
+        <div class="card-body">
+            <div class='input-group mb-3'>
+                <div class="form-group row"></div>
+                    <div class="col-12 lm-3"> 
+                        <h2 class="lm-3"> Nueva cita para: <span style="color:darkblue">{{ apellido }} {{nombre}}</span> </h2>
+                    </div>
+                </div>    
+                <!-- <div class='input-group-prepend'> -->
+                    <form action="{{ url_for('clientes_bp.grabarCita') }}" method='POST' id="clientForm">
+                        <input type="text" id="idcliente" name="idcliente" value="{{ idcliente }}" readonly hidden>
+                        <div class="form-group row">
+                            <div class="col-3 mb-3">    
+                                <label for='dia' class="form-label" >Dia de la cita: <span style="color:red">*</span></label>
+                                <input type='date' class="form-control" id='dia' name='dia' required>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label for='hora' class="form-label">Hora de la cita: <span style="color:red">*</span></label>
+                                <input type='time' class="form-control" id='hora' name='hora' required>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label for='diaEvento' class="form-label">Dia del evento: <span style="color:red">*</span></label>
+                                <input type='date' class="form-control" id='diaEvento' name='diaEvento' required>
+                            </div>
+                        </div>     
+                        <div class="form-group row">
+                            <div class="col-4 mb-3">
+                                <label for="tipoEvento">Tipo de evento:<span style="color:red">*</span></label>
+                                <select id="tipoEvento" name="tipoEvento" class="form-control" required>
+                                  <option value="" selected disabled>Seleccione un tipo de evento</option>
+                                  <!-- Aquí cargarás los tipos de eventos desde el servidor -->
+                                  {% for tipoEvento in tipoEventos %}
+                                    <option value={{ tipoEvento[0] }}>{{ tipoEvento[1] }}</option>  
+                                  {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for='lugarEvento' class="form-label">Lugar del evento: <span style="color:red">*</span></label>
+                                <input type='text' class="form-control" id='lugarEvento' name='lugarEvento' required placeholder="Lugar donde se realizará el evento">
+                            </div>
+                        </div>     
+                        <div class="form-group row">
+                            <div class="col-12 mb-3">    
+                                <label for='observaciones' class="form-label" >Observaciones:</label>
+                                <textarea class="form-control" id='observaciones' name='observaciones' placeholder="Observaciones adicionales a los datos del cliente" maxlength="250" >
+                                </textarea>  
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span style="color:red">* Datos obligatorios </span>  
+                        </div>
+                        <button type='submit' class='btn btn-success btn-icon-split'> 
+                            <span class="icon text-white-50">
+                                <i class="fas fa-flag"></i>
+                            </span>
+                            <span class="text">Agregar cita</span>
+                        </button>
+                    </form>    
+                <!-- </div> -->
+            </div>
+        </div>        
+    
+
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    
+{% endblock js_script %}
+

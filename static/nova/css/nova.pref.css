@@ -1,0 +1,119 @@
+.bg-color-lightred {
+    background-color: rgba(249, 126, 135, 0.43);
+}
+
+.bg-color-lightgreen {
+    background-color: rgba(130, 249, 126, 0.43);
+}
+
+/* paleta de colores nova */
+.bg-color-darkblue {
+    background-color: #1f3c7c;
+}
+
+.bg-color-mediumblue {
+    background-color: #5275b2;
+}
+
+.bg-color-lightgray {
+    background-color: #f7fafb;
+}
+
+.bg-color-lightblue {
+    background-color: #96aacc;
+}
+
+.bg-color-lightorange {
+    background-color: #fdca8f;
+}
+
+.bg-color-mediumbrown {
+    background-color: #a75843;
+}
+
+.bg-color-mediumorange {
+    background-color: #f6a22d;
+}
+
+.bg-color-darkbrown {
+    background-color: #5a3d54;
+}
+
+.bg-color-gradient-main{
+    background-image: linear-gradient(#1f3c7c, #5275b2, #96aacc);
+}
+
+
+.btn-primario{
+    background-color: #1f3c7c;
+    color: #eeeeee; 
+}
+
+.btn-secundario {
+    background-color: #f6a22d;
+    color: #eeeeee; 
+}
+
+.btn-terciario {
+    background-color: rgba(21, 148, 17, 0.726);
+    color: #eeeeee; 
+}
+
+.btn-cuarto {
+    background-color: rgb(194, 57, 164);
+    color: #eeeeee; 
+}
+
+.nova-solid1{
+    background-color:#00b89f;
+    color: #eeeeee; 
+}
+
+.nova-solid2{
+    background-color:#1150af;
+    color: #eeeeee; 
+}
+
+.nova-solid3{
+    background-color:#76b583;
+    color: #eeeeee; 
+}
+
+.nova-solid4{
+    background-color:#ff9944;
+    color: #eeeeee; 
+}
+
+.nova-solid5{
+    background-color:#0048ba;
+    color: #eeeeee; 
+}
+
+.nova-solid6{
+    background-color:#50647f;
+    color: #eeeeee; 
+}
+
+.nova-solid7{
+    background-color:#64b5bf;
+    color: #eeeeee; 
+}
+
+.nova-solid8{
+    background-color:#efbf4d;
+    color: #eeeeee; 
+}
+
+.nova-solid9{
+    background-color:#3063af;
+    color: #eeeeee; 
+}
+
+
+.text-nova-red{
+    color: red;
+}
+
+.text-nova-darkblue {
+    color: #1f3c7c;
+}

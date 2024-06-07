@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos del contrato</h6>
+        </div>
+        <div class="card-body">
+            <div class='input-group'>
+                <div class="form-group row">
+                    <div class="col-12 lm-3"> 
+                        <h5 class="lm-3 font-weight-bold text-success"> Nueva contrato para: <span style="color:darkblue">{{ cliente[1] }} {{cliente[2]}}</span> </h5>
+                    </div>
+                </div>    
+            </div>
+        
+            <div class="card-body">
+                <!-- <div class='input-group mb-3'> -->
+                <!--    <div class='input-group-prepend'> -->
+                        <form action='#' method='POST' id="clientForm">
+                            <div class="card mb-3" >
+                                <div class="card-body">
+                                    <!-- 
+                                        Datos del cliente
+                                    -->
+
+                                    <h5 class="card-title">Datos del cliente</h5>
+
+                                    <div class="form-group row">                    
+                                        <div class="col-md-2 mb-3">
+                                            <label for='idcliente' class="form-label"># Cliente:</label>
+                                            <input type='text' class="form-control" id='idcliente' name='idcliente' readonly value="{{ cliente[0] }}">
+                                        </div>
+                                        <div class="col-5 mb-3">    
+                                            <label for='nombre' class="form-label" >Nombre: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='nombre' name='nombre' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-5 mb-3">
+                                            <label for='apellido' class="form-label">Apellido: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='apellido' name='apellido' required value="{{ cliente[2] }}">
+                                        </div>
+                                    </div>  
+                                    <div class="from-group row">
+                                        <div class="col-3 mb-3">    
+                                            <label for='celular' class="form-label" >N° Celular: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='celular' name='celular' required value="{{ cliente[3] }}">
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <label for='documento' class="form-label">N° Documento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='documento' name='documento' required value="{{ cliente[4] }}">
+                                        </div>
+                                        <div class="col-6 mb-3">    
+                                        <label for='contacto' class="form-label" >Contacto:</label>
+                                        <input type='text' class="form-control" id='contacto' name='contacto' placeholder="Quien les dio el contacto" value="{{ cliente[7] }}">
+                                        </div>
+                                    </div>    
+                                    <div class="form-group row">
+                                        <div class="col-8 mb-3">    
+                                            <label for='domicilio' class="form-label" >Domicilio:<span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='domicilio' name='domicilio' value="{{ cliente[5] }}">
+                                        </div>
+                                        
+                                    </div>   
+                                    
+                                    <div class="form-group row">
+                                        <div class="col-12 mb-3">    
+                                            <label for='observaciones' class="form-label" >Observaciones:</label>
+                                            <textarea class="form-control" id='observaciones' name='observaciones' placeholder="Observaciones adicionales a los datos del cliente" maxlength="250" value="{{ cliente[8] }}">
+                                            </textarea>  
+                                        </div>
+                                    </div>   
+                                    
+                                </div>
+                            </div>    
+                            <!-- 
+                                Datos del contrato
+                            -->
+                            <div class="card mb-3" >
+                                <div class="card-body">
+                                    <h5 class="card-title">Datos del contrato</h5>
+                                    <div class="form-group row">                    
+                                        <div class="col-2 mb-3">    
+                                            <label for='idContrato' class="form-label" ># Evento:</label>
+                                            <input type='text' class="form-control" id='idContrato' name='idContrato' value="{{ contrato[0] }}" readonly>
+                                        </div>
+                                        <div class="col-8 mb-3">    
+                                            <label for='tituloEvento' class="form-label" >Nombre del evento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='tituloEvento' name='tituloEvento' required value="{{ contrato[2] }}">
+                                        </div>
+                                    </div>    
+                                    <div class="form-group row">                    
+                                        <div class="col-7 mb-3">    
+                                            <label for='nombreContrato' class="form-label" >Nombre en el contrato: <span style="color:red">*</span></label>
+                                            {% if contrato[1] != '' %}
+                                                <input type='text' class="form-control" id='nombreContrato' name='nombreContrato' required value="{{ cliente[1] }}, {{ cliente[2] }}">
+                                            {% else %}
+                                                <input type='text' class="form-control" id='nombreContrato' name='nombreContrato' required value="{{ contrato[1] }}">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-5 mb-3">
+                                            <label for='dniContrato' class="form-label">Doc. en contrato: <span style="color:red">*</span></label>
+                                            {% if contrato[4] != '' %}
+                                                <input type='text' class="form-control" id='dniContrato' name='dniContrato' required value="{{ cliente[2] }}">
+                                            {% else %}    
+                                                <input type='text' class="form-control" id='dniContrato' name='dniContrato' required value="{{ contrato[4] }}">
+                                            {% endif %}    
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">                    
+                                        <div class="col-2 mb-3">    
+                                            <label for='fechaContrato' class="form-label" >Fecha del contrato: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='fechaContrato' name='fechaContrato' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <label for='tipoEventoContrato' class="form-label">Tipo evento: <span style="color:red">*</span></label>
+                                            <select id="tipoEventoContrato" class="form-control" required>
+                                                <option value="" selected disabled>Tipo de evento</option>
+                                                <!-- Aquí cargarás las provincias desde el servidor -->
+                                              </select>
+                                        </div>
+                                        <div class="col-2 mb-3">    
+                                            <label for='fechaEvento' class="form-label" >Fecha del evento: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='fechaEvento' name='fechaEvento' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-2 mb-3">    
+                                            <label for='horaEvento' class="form-label" >Hora del evento: <span style="color:red">*</span></label>
+                                            <input type='time' class="form-control" id='horaEvento' name='horaEvento' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-3 mb-3">    
+                                            <label for='lugarEvento' class="form-label" >Lugar del evento: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='lugarEvento' name='lugarEvento' required value="{{ cliente[1] }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-2 mb-3">    
+                                            <label for='diaCivil' class="form-label" >Día del civil: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='fechaEvento' name='fechaEvento' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-2 mb-3">    
+                                            <label for='horaCivil' class="form-label" >Hora del civil: <span style="color:red">*</span></label>
+                                            <input type='time' class="form-control" id='horaCivil' name='horaCivil' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-3 mb-3">    
+                                            <label for='lugarCivil' class="form-label" >Lugar del civil: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='lugarCivil' name='lugarCivil' required value="{{ cliente[1] }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-2 mb-3">    
+                                            <label for='diaCeremonia' class="form-label" >Día de la ceremonia: <span style="color:red">*</span></label>
+                                            <input type='date' class="form-control" id='diaCeremonia' name='diaCeremonia' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-2 mb-3">    
+                                            <label for='horaCeremonia' class="form-label" >Hora de la ceremonia: <span style="color:red">*</span></label>
+                                            <input type='time' class="form-control" id='horaCeremonia' name='horaCeremonia' required value="{{ cliente[1] }}">
+                                        </div>
+                                        <div class="col-3 mb-3">    
+                                            <label for='lugarCeremonia' class="form-label" >Lugar de la ceremonia: <span style="color:red">*</span></label>
+                                            <input type='text' class="form-control" id='lugarCeremonia' name='lugarCeremonia' required value="{{ cliente[1] }}">
+                                        </div>
+
+                                    </div>
+                                  
+                                </div>
+                            </div>
+
+                            <div class="card mb-3" >
+                                <div class="card-body">
+                                    <h5 class="card-title">Datos de facturación</h5>
+                                </div>    
+
+                                <div class="card-body">
+                                    <div class="row clearfix">
+                                        <div class="row clearfix float-start">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label" for="idProducto">ID del Artículo:<span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" id="idProducto" name="idProducto" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button type="button" onclick="agregarFila()" class="btn btn-primary">Agregar Artículo</button><br><br>
+                                            </div>    
+                                        </div>    
+                                        <br>
+                                        <div class="col-md-12">
+                                            <!-- <table class="table table-bordered table-hover" id="tab_logic"> -->
+                                            <table class="table table-bordered table-hover" id="tabla-articulos">
+                                                <input type="hidden" name="item_nos" id="item_nos" value="1">
+                                                <col width="10%">
+                                                <col width="30%">
+                                                <col width="15%">
+                                                <col width="15%">
+                                                <col width="10%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center"> Código </th>
+                                                        <th class="text-center"> Detalle </th>
+                                                        <th class="text-center"> Cantidad </th>
+                                                        <th class="text-center"> Precio unit. </th>
+                                                        <th class="text-center"> Acción </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Aquí se agregarán las filas dinámicamente -->
+                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!--
+                                    <div class="row clearfix float-start">
+                                        <div class="col-md-12">
+                                            <button type="button" id="add_row" class="btn btn-primary">Nuevo artículo</button>
+                                            <button type="button" id='delete_row' class="btn btn-danger">Borrar fila</button>
+                                        </div>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>    
+
+                            <div class="form-group row mb-3">
+                            <span style="color:red">* Datos obligatorios </span>  
+                            </div>
+
+                            <button type="button" id="grabarCliente" class="btn btn-success">Generar contrato</button>
+                            <button type="button" id="borrarCliente" class="btn btn-danger">Borrar</button>
+                            <!-- <button type="button" id="nuevoCliente" class="btn btn-primary">Nuevo</button> -->
+                            <a class="btn btn-primary" href="{{ url_for('clientes_bp.abmClientes', id=-1) }}">Nuevo</a>
+                            <a class="btn btn-warning" id="nuevaCita" href="#">Nueva cita</a>
+                            <a class="btn btn-info" href="{{ url_for('clientes_bp.abmContrato', idCliente= cliente[0] ) }}">Nuevo contrato</a>
+                            
+                        </form>
+                <!--  </div>    -->
+                <!-- </div> -->
+            </div>        
+    
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+
+    function agregarFila() {
+        var idArticulo = document.getElementById('idProducto').value;
+        //idArticulo = idArticulo.padStart(8, '0');
+        console.log(idArticulo);
+        fetch('{{ url_for("productos_bp.get_producto", codigo="") }}' + idArticulo)
+            .then(response => response.json())
+            .then(data => {
+                var table = document.getElementById('tabla-articulos');
+                var row = table.insertRow(-1);
+                console.log(data);
+                if (data['error']) {
+                    console.log('No se encontró el articulo');
+                    window.confirm('No se encontró el producto con código: ' + idArticulo);
+                    document.getElementById('idProducto').value = '';
+                }
+                else{
+
+                    row.innerHTML = `
+                        <tr id="addr0">
+                            <td>
+                                <input type="text" name='codigo' placeholder='Código'
+                                    class="form-control" required value="${idArticulo}"/>
+                            </td>
+                            <td>
+                                <input type="text" name='detalle' placeholder='Detalle'
+                                    class="form-control" required value="${data['descripcion']}"/>
+                            </td>
+                            <td>
+                                <input type="number" name='cantidad' placeholder='Cantidad'
+                                    class="form-control desc" id='item_unit' value="1" required />
+                            </td>
+                            <td>
+                                <input type="number" name='precio-unitario' placeholder='Precio unitario'
+                                    class="form-control cat" id="precio-unitario" value="${data.precio}" required />
+                            </td>
+                        </tr>
+                        <!--
+                        <td>${data.idarticulo}</td>
+                        <td>${data.detalle}</td>
+                        <td><input type="number" name="cantidad[]" required></td>
+                        <td><input type="number" name="precio_unitario[]" value="${data.idarticulo}" readonly></td>
+                        -->
+                        <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    `;
+                }
+            })
+            .catch(error => console.error('Error al obtener los detalles del artículo:', error));
+    }
+
+    // Función para eliminar una fila de la tabla
+    function eliminarFila(button) {
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    //Funcion para grabado de la factura
+    function guardarOrdenCompras() {
+        var idProveedor = document.getElementById('idProveedor').value;
+        var items = obtenerItemsDeTabla();
+        console.log(idProveedor);
+        console.log('------------------');
+        console.log(items);
+        fetch('/guardar_ordencompras', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({idProveedor: idProveedor, items: items}),
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.log('dio error');
+                throw new Error('Error al guardar la orden de compras');
+            }
+            console.log('todo ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success){
+                console.log('Orden de compras guardada con éxito:', data);
+                // Aquí puedes redirigir al usuario a una página de éxito o realizar otras acciones
+                var mensajeExito = document.getElementById('mensaje-exito');
+                mensajeExito.innerText = 'Orden de compras guardada con éxito';
+                // Limpiar los campos del formulario
+                limpiarCampos();
+                fetch('{{ url_for("compras_bp.abmOrdCompras") }}');
+            }
+            else {
+                console.error('Error al guardar la orden de compras:', data.message);
+                // Mostrar mensaje de error
+                var mensajeError = document.getElementById('mensaje-error');
+                mensajeError.innerText = 'Error al guardar la orden de compras: ' + data.message;
+            }    
+        })
+        .catch(error => {
+            console.error('Error al guardar la orde de compras:', error);
+            var mensajeError = document.getElementById('mensaje-error');
+            mensajeError.innerText = 'Error al procesar la respuesta';
+            // Aquí puedes mostrar un mensaje de error al usuario
+        });
+    }
+    
+    //Funcion para obtener los items cargado y poder grabar la factura
+    function obtenerItemsDeTabla() {
+        var items = [];
+        var tabla = document.getElementById('tabla-articulos');
+        for (var i = 1; i < tabla.rows.length; i++) {
+            var row = tabla.rows[i];
+            var item = {
+                descripcion: row.cells[0].innerText,
+                cantidad: row.cells[1].querySelector('input').value,
+                precio_unitario: row.cells[2].querySelector('input').value,
+            };
+            items.push(item);
+        }
+        return items;
+    }
+
+    // Función para limpiar los campos del formulario
+    function limpiarCampos() {
+        document.getElementById('idProveedor').value = '';
+        // Limpiar otros campos del formulario según sea necesario
+        // Limpiar la tabla de artículos
+        var tablaArticulos = document.getElementById('tabla-articulos');
+        // Eliminar todas las filas excepto la primera (encabezados)
+        while (tablaArticulos.rows.length > 1) {
+            tablaArticulos.deleteRow(1);
+        }
+    }
+
+    </script>
+    
+{% endblock js_script %}
+

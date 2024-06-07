@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <h1>Orden de compras</h1>
+
+    <!-- Formulario para ingresar fechas -->
+    
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form id="miFormulario">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <h5 class="card-header">Fecha de venta</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="mb-3 ml-3 col-mb-6">
+                                        <label for="fecha_desde" >Desde:</label>
+                                        <input type="date" id="fecha_desde" name="fecha_desde" class="form-control">
+                                    </div>
+                                    <div class="mb-3 ml-3 col-mb-6">
+                                        <label for="fecha_hasta">Hasta:</label>
+                                        <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control">
+                                    </div>    
+                                </div>    
+                                <button onclick="cargarDatos()" class="btn btn-primary mt-3">Cargar datos</button>
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <h5 class="card-header">Otras opciones22</h5>
+                    <div class="card-body">
+                        <form action={{url_for('compras_bp.getArticulosOrdcompras')}}>
+                            <div class="row">
+                                <div class="mb-3 col-3">
+                                    <label for="fecha_desde" >Desde:</label>
+                                    <input type="date" id="fecha_desde" name="fecha_desde" class="form-control">
+                                </div>
+                                <div class="mb-3 col-3">
+                                    <label for="fecha_hasta">Hasta:</label>
+                                    <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control">
+                                </div>    
+                            </div>    
+                            <button type="submit" class="btn btn-primary mt-3">Cargar datos</button>
+                        </form>        
+                    </div>
+                </div>
+            </div>    
+        </div>    
+</div>        
+
+
+<div class="container-fluid">
+    <div class="card shadow mb-4 ml-0">
+        <div class="card-header">
+            <h6 class="m-0 font-weight-bold text-primary">Detalle de productos</h6>
+        </div>
+        
+            <!-- Tabla principal -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive col-md-8">
+                        <table class="table table-bordered table-striped table-sm" id="tablaArtOrdCompras" name="tabla_principal" width="100%" cellspacing="0" >
+                        <colgroup span="1" style="background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(200, 100, 0, 0.3);"></colgroup>
+                        <colgroup span="4" style="background: rgba(61, 183, 61, 0.15); border: 1px solid rgba(100, 200, 0, 0.3);"></colgroup>
+                        <colgroup span="1" style="background: rgba(245, 40, 145, 0.15); border: 1px solid rgba(200, 100, 0, 0.3)"></colgroup>
+                        <!--  <table id="dataTable" name="tabla_principal" class="table table-bordered table-striped" > -->
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Artículo</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Sel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se insertarán las filas con los datos -->
+                                {% for art in datosArt %}
+                                    <tr>
+                                        <td>{{art["CODIGO"]}}</td>
+                                        <td>{{art["NOMBRE"]}}</td>
+                                        <td>{{art["TOTVENDIDO"]}}</td>
+                                        <td><input type="number" value="1"></td>
+                                        <td><input type="number" value='{{ art["PREC1"] }}'></td>
+                                        <td><input type="checkbox"></td>
+                                    </tr>
+                                {% endfor %}    
+                            </tbody>
+                            <tfoot class="thead-dark">
+                                <tr>
+                                    <th>Artículo</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Sel</th>
+                                </tr>
+                            </tfoot>    
+                        </table>
+                    </div>    
+                    <div class="table-responsive col-4 mt-5">
+                        <!-- Tabla de stocks -->
+                        <h6 class="ml-3 mt-2 font-weight-bold text-primary" id="elArticulo">El producto</h6>
+                        <table id="tabla_stocks" class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sucursal</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se insertarán las filas con los datos -->
+                            </tbody>
+                        </table>
+                    </div>    
+                </div>    
+            </div>    
+            <!-- Botón para guardar cambios
+            <button id="guardar_cambios">Guardar Cambios</button>
+             -->
+        
+    </div>  
+    
+    <button class="btn btn-danger" id="btnIterate">Guardar Cambios</button>
+    
+</div>
+
+{% endblock contenido %}
+
+{% block js_script %}
+
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/static/js/demo/datatables-demo.js"></script>
+
+    <script>
+        // Función para cargar los datos en las tablas
+        function cargarDatos() {
+            var formData = new FormData(document.getElementById('miFormulario')); // Obtener datos del formulario
+            event.preventDefault();
+            fetch('/get_articulos_ordcompras?' + new URLSearchParams(formData))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('La solicitud no se pudo completar correctamente.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Llenar tabla principal con datos recibidos
+                    $('table[name="tabla_principal"] tbody').empty();
+                    data.forEach(function(item) {
+                        $('table[name="tabla_principal"] tbody').append(
+                            '<tr>' +
+                            '<td>' + item.CODIGO + '</td>' +
+                            '<td>' + item.NOMBRE + '</td>' +
+                            '<td>' + item.TOTVENDIDO + '</td>' +
+                            //'<td contenteditable="true"></td>' + // Columna editable para cantidad
+                            '<td><input type="number"></td>' +
+                            '<td><input type="number" value="' + item.PREC1 + '"></td>' + // Campo editable para precio
+                            '<td><input type="checkbox"></td>' + // Checkbox para selección
+                            '</tr>'
+                        );
+                    });
+                })
+                .catch(error => {
+                    console.error('Se produjo un error:', error);
+                });
+        }
+
+    // Agregar evento de clic a cada fila de la tabla principal
+    $(document).on('click', 'table[name="tabla_principal"] tbody tr', function() {
+        // Obtener el código del artículo seleccionado
+        var codigoArticulo = $(this).find('td:first').text(); // Suponiendo que el primer td contiene el código del artículo
+         // Llamar a una función para recalcular y llenar la tabla de stocks con el nuevo artículo seleccionado
+        calcularYllenarTablaStocks(codigoArticulo);
+    });
+
+        // Función para recalcular y llenar la tabla de stocks
+        function calcularYllenarTablaStocks(codigoArticulo) {
+            // Realizar una nueva solicitud fetch para obtener los datos de stocks del artículo seleccionado
+            document.getElementById('elArticulo').innerText = 'Stock art.: ' + codigoArticulo;
+            fetch('/obtener_stocks/' + codigoArticulo)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('La solicitud no se pudo completar correctamente.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Limpiar la tabla de stocks
+                    $('#tabla_stocks tbody').empty();
+        
+                    // Llenar la tabla de stocks con los datos recibidos
+                    data.forEach(item => {
+                        $('#tabla_stocks tbody').append(
+                            '<tr>' +
+                            '<td>' + item.NOMBRE + '</td>' +
+                            '<td>' + item.VENTA + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                })
+                .catch(error => {
+                    // Manejar errores
+                    console.error('Se produjo un error:', error);
+                });
+                //
+        }
+
+        $(document).ready(function() {
+            // Inicializar DataTable
+            var table = $('#tablaArtOrdCompras').DataTable();
+        
+            // Al hacer clic en el botón
+            $('#btnIterate').on('click', function() {
+                // Iterar a través de todas las páginas de la tabla
+                articulosEnOrdenCompra = [];
+                var filasProcesadas = 0;
+                var filasIgnoradas = 0;
+                for (var i = 0; i < table.page.info().pages; i++) {
+                    table.page(i).draw('page');
+        
+                    // Iterar a través de cada fila visible en la página actual
+                    table.rows({page: 'current'}).every(function(rowIdx, tableLoop, rowLoop) {
+                        // Obtener datos de la fila actual
+                        let rowData = this.data();
+                        //let elegida = $(this.node()).find('td:eq(5) input').val();
+                        let elegida = $(this.node()).find('td:eq(5) input').prop('checked');
+                        let precio = $(this.node()).find('td:eq(4) input').val();
+                        let cantidad = $(this.node()).find('td:eq(3) input').val();
+                        if ( elegida === true) {
+                            filasProcesadas++;
+                            var fila = {
+                                codigo: rowData[0],
+                                precio: precio,
+                                cantidad: cantidad
+                                // Agrega más columnas según tu tabla
+                            };
+                            // Agregar el objeto fila al arreglo
+                            articulosEnOrdenCompra.push(fila);
+                            // Capturar valores de columnas específicas (ejemplo)
+                            var columna1 = rowData[0]; // Suponiendo que la columna 1 es la primera
+                            var columna2 = rowData[1]; // Suponiendo que la columna 2 es la segunda
+                            var columna3 = rowData[2]; // Suponiendo que la columna 3 es la tercera
+                            // Realizar acciones con los valores capturados
+                            console.log('Valor de columna 1:', columna1);
+                            console.log('Valor de columna 2:', columna2);
+                            console.log('Valor de columna 3:', columna3);
+                            // Agrega más acciones según tus necesidades
+                        }    
+                        else{
+                            filasIgnoradas++;
+                        }
+                        
+                    });
+                }
+                console.log('voy a grabar');
+                fetch('/grabar_orden_compras', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(articulosEnOrdenCompra)
+
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Verificar si la respuesta contiene un mensaje de éxito
+                    if (data && data.message === 'Datos recibidos correctamente') {
+                        // Redirigir al usuario a otra página
+                        window.location.href = '{{ url_for("compras_bp.ordenCompras")}}';
+                    } else {
+                        // Mostrar un mensaje de error o tomar otras acciones en caso de fallo
+                        console.error('Error al procesar los datos:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar datos:', error);
+                });
+                console.log("filas preocesadas:" + filasProcesadas + " - filas ignoradas:" + filasIgnoradas);
+            });
+        });    
+
+    </script>
+
+{% endblock js_script %}
+

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Recibo de pago</h6>
+        </div>
+    </div>    
+</div>    
+<div class="container-fluid">
+    <form action="{{ url_for('ventas_bp.grabarRecibo') }}" method="post" id="reciboPago" onsubmit="return validarFormasDePago()">
+        <div class="form-row">
+            <div class="col-7 card shadow m-2">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Datos del recibo</h6>
+                </div>
+                <div class="card-body">
+                    <input type="text" class="m-0 mb-3 font-weight-bold text-danger form-control-plaintext" id="evento" name="evento" readonly value="{{datosRecibo[7]}}">
+                    <h6 class="m-0 mb-3 font-weight-bold text-danger">{{datosRecibo[8]}}</h6>
+                    <div class="form-group row">                    
+                        <div class="col-md-2 mb-3">
+                            <label for='idrecibo' class="form-label"># Recibo:</label>
+                            <input type='text' class="form-control" id='idrecibo' name='idrecibo' readonly value="{{ idRecibo }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for='idcliente' class="form-label"># Cliente:</label>
+                            <input type='text' class="form-control" id='idcliente' name='idcliente' readonly value="{{ datosRecibo[0] }}">
+                        </div>
+                        <div class="col-8 mb-3">    
+                            <label for='nombre' class="form-label" >Nombre:</label>
+                            <input type='text' class="form-control" id='nombre' name='nombre' required value="{{ datosRecibo[6] }}, {{ datosRecibo[5] }}">
+                        </div>
+                    </div>  
+                    <div class="form-group row">                    
+                        <div class="col-md-2 mb-3">
+                            <label for='cuota' class="form-label">Cuota:</label>
+                            {% if datosRecibo[2] == 0 %}
+                            <input type='text' class="form-control" id='cuota' name='cuota' readonly value="Pago inicial">
+                            {% else %}
+                                <input type='text' class="form-control" id='cuota' name='cuota' readonly value="{{ datosRecibo[2] }}">
+                            {% endif %}    
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for='vtoCuota' class="form-label">Vto. cuota:</label>
+                            <input type='date' class="form-control" id='vtoCuota' name='vtoCuota' readonly value="{{ datosRecibo[3] }}">
+                        </div>
+                        <div class="col-2 mb-3">    
+                            <label for='dias' class="form-label" >Días mora:</label>
+                            <input type='text' class="form-control" id='dias' name='dias' required value="{{ dias }}">
+                        </div>
+                        <div class="col-3 mb-3">    
+                            <label for='importe' class="form-label" >Importe:</label>
+                            <input type='text' class="form-control" id='importe' name='importe' readonly value="{{ importeCuota }}">
+                        </div>
+                    </div>    
+                    <div class="form-group row">    
+                        <div class="col-4 mb-3">    
+                            <label for='punitorios' class="form-label" >Int. mora:</label>
+                            <input type='text' class="form-control" id='punitorios' name='punitorios' required value="{{ interes }}">
+                        </div>
+                        <div class="col-4 mb-3">    
+                            <label for='importeActualizado' class="form-label" >Importe actualizado:</label>
+                            <input type='text' class="form-control" id='importeActualizado' name='importeActualizado' required value="{{ importeActualizado }}">
+                        </div>
+                        <div class="col-4 mb-3">    
+                            <label for='fechaPago' class="form-label" >Fecha pago:</label>
+                            <input type='date' class="form-control" id='fechaPago' name='fechaPago' required value="{{ hoy }}">
+                        </div>
+
+                    </div>  
+                </div>    
+            </div>    
+            <div class="col-4 card shadow m-2">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Datos del pago</h6>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-6 mb-3">
+                        <label for='efectivo' class="form-label">Efectivo:</label>
+                        <input type='text' class="form-control" id='efectivo' name='efectivo'>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for='cuentaBancaria' class="form-label">Transferencia/billetera virtual:</label>
+                        <select class="form-control mb-3 col-md-8" name="cuentaBancaria" id="cuentaBancaria">
+                            {% for cuenta in cuentasBancarias %}
+                                <option value="{{ cuenta[0] }}">{{ cuenta[1] }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for='banco' class="form-label">Importe:</label>
+                        <input type='text' class="form-control col-md-6" id='banco' name='banco'>
+                    </div>
+                </div>    
+            </div>    
+        </div>
+        <button type="submit" class="btn btn-success">Grabar e imprimir</button>
+    </form>        
+</div>
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+        function convertCurrencyToDouble(currency) {
+            // Using regular expression to match numeric and decimal characters
+            const regex = /[\d.]+/g;
+            // Extracting numeric and decimal characters from the currency string
+            const matches = currency.match(regex);
+            // Joining the matched characters to form a numeric string
+            const numericString = matches.join('');
+            // Converting the numeric string to a double value
+            const doubleValue = parseFloat(numericString);
+            return doubleValue;
+        }
+
+        function validarFormasDePago() {
+            var total = parseFloat(convertCurrencyToDouble(document.getElementById('importeActualizado').value));
+            var pagoEfectivo = parseFloat(document.getElementById('efectivo').value);
+            var pagoBanco = parseFloat(document.getElementById('banco').value);
+            console.log(total, pagoEfectivo, pagoBanco);
+
+            if (isNaN(total) || isNaN(pagoEfectivo) || isNaN(pagoBanco)) {
+                alert("Por favor, ingrese valores numéricos válidos en todos los campos.");
+                return false;
+            }
+            var sumaFormasDePago = pagoEfectivo + pagoBanco;
+        
+            if (sumaFormasDePago != total) {
+                alert("La suma de las formas de pago no cubre el total del evento.");
+                return false; // Evita el envío del formulario
+            }
+            return true; // Permite el envío del formulario
+        }
+    </script>
+    
+{% endblock js_script %}
+

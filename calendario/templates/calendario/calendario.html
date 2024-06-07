@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+    </div>
+
+    <div class="container-fluid">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Mi calendario</h6>
+        </div>
+          <div class = "m-3" id='calendar'> </div>
+      </div>    
+    </div>  
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src='/static/calendar/index.global.min.js'></script>
+    <script src='/static/calendar/core/locales/es.global.js'></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            //plugins: [ 'dayGrid', 'interaction' ],
+            locale: 'es', // Configurar el idioma del calendario
+            //defaultView: 'dayGridMonth', // Vista por defecto: mes
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            events: function(info, successCallback, failureCallback) {
+              // Aquí puedes cargar eventos del período actual
+              cargarEventos(info.start, info.end, successCallback, failureCallback);
+            },
+            dateClick: function(info) {
+              // Aquí puedes cargar eventos de la fecha clicada
+              cargarEventos(info.date, info.date, function() {}, function() {});
+            }
+            
+          });
+        calendar.setOption('locale', 'es');
+        calendar.render();
+        
+
+        function cargarEventos(start, end, successCallback, failureCallback) {
+          // Aquí puedes realizar una solicitud al servidor (por ejemplo, a tu servidor Flask) para obtener los eventos del período especificado
+          // Luego, llama a successCallback con los eventos obtenidos
+          // En caso de error, llama a failureCallback
+          var url = '/getEventos?start=' + start.toISOString() + '&end=' + end.toISOString();
+          fetch(url)
+            .then(function(response) {
+              if (!response.ok) {
+                throw new Error('Error al cargar los eventos');
+              }
+              return response.json();
+            })
+            .then(function(data) {
+              successCallback(data);
+            })
+            .catch(function(error) {
+              console.error('Error:', error);
+              failureCallback();
+            });
+        }
+      
+        // Opcional: Agregar manejadores de eventos para los botones "anterior" y "siguiente"
+        /*
+        document.querySelector('.fc-prev-button').addEventListener('click', function() {
+          calendar.prev();
+        });
+      
+        document.querySelector('.fc-next-button').addEventListener('click', function() {
+          calendar.next();
+        });
+        */
+      });
+
+    </script>
+    
+{% endblock js_script %}
+

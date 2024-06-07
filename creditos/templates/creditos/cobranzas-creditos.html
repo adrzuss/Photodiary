@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Cobranzas de créditos</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Generar reporte </a>
+        </div>
+
+        <div class="card-body">
+            <div class='input-group mb-3'>
+                <div class='input-group-prepend'>
+                    <form action='{{ url_for('creditos_bp.cobranzas_creditos') }}' method='GET'>
+                        <label for='Desde'>Desde:</label>
+                        <input type='date' id='fechaDesde' name='fechaDesde' value="{{ fechaDesde }}">
+                        <label for='Hasta'>Hasta:</label>
+                        <input type='date' id='fechaHasta' name='fechaHasta' value="{{ fechaHasta }}">
+                        <button type='submit' class='btn btn-success btn-icon-split'> 
+                            <span class="icon text-white-50">
+                                <i class="fas fa-flag"></i>
+                            </span>
+                            <span class="text">Calcular</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>        
+    
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Vencimientos en el periodo</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800"> Total: {{ cobranzas['TOT_VENCIMIENTOS'] }} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800"> Cant: {{ cobranzas['CANT_VENCIMIENTOS'] }} </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-book fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Vencimientos en término </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Total: {{cobranzas['TOT_EN_TERMINO']}} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Cant: {{cobranzas['CANT_EN_TERMINO']}}  </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-thumbs-up fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Vencimientos fuera de término </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Total: {{cobranzas['TOT_FUERA_TERMINO']}} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Cant: {{cobranzas['CANT_FUERA_TERMINO']}} </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-thumbs-down fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-secondary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Venc. de otros periodos pagados en este periodo</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Total: {{cobranzas['TOT_ANTERIORES']}} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Cant: {{cobranzas['CANT_ANTERIORES']}} </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-handshake fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Cobranzas de créditos por sucursal</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Opciones del grafico:</div>
+                                <a class="dropdown-item" href="#">Analizar otro periodo</a>
+                                <a class="dropdown-item" href="#">Analizar una sucursal</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Opciones</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <script>
+                                cobranzasEnSucs = {{ cobranzasSucs|tojson }};
+                                leyendasCob = {{ sucursales|tojson }};
+                            </script>
+                            <canvas id="barrasCobranzas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        
+    </div>   
+    
+
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts-->
+    <script src="static/js/demo/chart-bar-cobranzas.js"></script>
+
+{% endblock %}

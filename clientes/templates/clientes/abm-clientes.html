@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="container mt-5 mb-3">
+        <div class="row">
+          <div class="col">
+            <form id="searchForm">
+              <div class="form-row">
+                <div class="col">
+                  <select id="searchType" class="form-control">
+                    <option value="documento">Documento</option>
+                    <option value="telefono">Teléfono</option>
+                    <option value="nombre">Nombre</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <input type="text" id="searchValue" class="form-control" placeholder="Valor a buscar">
+                </div>
+                <div class="col">
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>    
+
+    <div class="row">
+    <div class="card shadow mb-4 col-8">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Alta bajas y modificaciones de clientes</h6>
+        </div>
+        <div class="card-body">
+            <!-- <div class='input-group mb-3'> -->
+            <!--    <div class='input-group-prepend'> -->
+                    <form action="{{ url_for('clientes_bp.abmClientes') }}" method='POST' id="clientForm">
+                        <div class="form-group row">                    
+                            <div class="col-md-2 mb-3 input-group-sm">
+                                <label for='idcliente' class="form-label"># Cliente:</label>
+                                <input type='text' class="form-control" id='idcliente' name='idcliente' readonly value="{{ cliente[0] }}">
+                            </div>
+                            <div class="col-5 mb-3 input-group-sm">    
+                                <label for='nombre' class="form-label" >Nombre: <span style="color:red">*</span></label>
+                                <input type='text' class="form-control" id='nombre' name='nombre' required value="{{ cliente[1] }}" autocomplete="false">
+                            </div>
+                            <div class="col-5 mb-3 input-group-sm">
+                                <label for='apellido' class="form-label">Apellido: <span style="color:red">*</span></label>
+                                <input type='text' class="form-control" id='apellido' name='apellido' required value="{{ cliente[2] }}" autocomplete="false">
+                            </div>
+                        </div>  
+                        <div class="from-group row">
+                            <div class="col-3 mb-3 input-group-sm">    
+                                <label for='celular' class="form-label" >N° Celular: <span style="color:red">*</span></label>
+                                <input type='text' class="form-control" id='celular' name='celular' required value="{{ cliente[3] }}">
+                            </div>
+                            <div class="col-3 mb-3 input-group-sm">
+                                <label for='documento' class="form-label">N° Documento:</label>
+                                <input type='text' class="form-control" id='documento' name='documento' value="{{ cliente[4] }}">
+                            </div>
+                            <div class="col-6 mb-3 input-group-sm">    
+                              <label for='contacto' class="form-label" >Contacto:</label>
+                              <input type='text' class="form-control" id='contacto' name='contacto' placeholder="Quien les dio el contacto" value="{{ cliente[7] }}">
+                            </div>
+                        </div>    
+                        <div class="form-group row">
+                            <div class="col-8 mb-3 input-group-sm">    
+                                <label for='domicilio' class="form-label" >Domicilio:</label>
+                                <input type='text' class="form-control" id='domicilio' name='domicilio' value="{{ cliente[5] }}">
+                            </div>
+                            <div class="col-4 mb-3 input-group-sm">
+                                <label for="provincia">Provincia:</label>
+                                <select id="provincia" name="provincia" class="form-control" required>
+                                  <option value="" selected disabled>Seleccione una provincia</option>
+                                  {% for provincia in provincias %}  
+                                    {% if provincia[0] == cliente[6] %}
+                                      <option value="{{ provincia[0] }}" selected> {{ provincia[1] }} </option>
+                                    {% else%}
+                                      <option value="{{ provincia[0] }}"> {{ provincia[1] }} </option>
+                                    {% endif %}  
+                                  {% endfor %}  
+                                  <!-- Aquí cargarás las provincias desde el servidor -->
+                                </select>
+                            </div>
+                        </div>   
+                        
+                        <div class="form-group row">
+                          <div class="col-12 mb-3 input-group-sm">    
+                              <label for='observaciones' class="form-label" >Observaciones:</label>
+                              <textarea class="form-control" id='observaciones' name='observaciones' placeholder="Observaciones adicionales a los datos del cliente" maxlength="250">{{ cliente[8] }}</textarea>  
+                          </div>
+                        </div>   
+                        
+                        <div class="form-group row">
+                            <div class="col-2 mb-3 input-group-sm">    
+                                <label for='alta' class="form-label" >Alta:</label>
+                                <input type='text' class="form-control" id='alta' name='alta' readonly value="{{ cliente[9] }}">
+                            </div>
+                            <div class="col-2 mb-3 input-group-sm">
+                                <label for='baja' class="form-label" >Baja:</label>
+                                {% if cliente[10]=='01-01-1900' %}
+                                  <input type='text' class="form-control" id='baja' name='baja' readonly value="Activo">
+                                {% else %}
+                                  <input type='text' class="form-control" id='baja' name='baja' readonly value="{{ cliente[10] }}">
+                                {% endif %}
+                            </div>
+                        </div>   
+                        {% if (citasActivas == 0) %}
+                          <h5>Cliente sin citas</h5>
+                        {% else %}  
+                          <h5 style="color:blue">Citas activas: {{citasActivas}} </h5>
+                        {% endif %}
+
+                        {% if (eventosActivos == 0) %}
+                          <h5>Sin eventos</h5>
+                        {% else %}  
+                          <h5 style="color: rgb(156, 6, 144) ">El cliente tiene eventos {{eventosActivos}} pendientes</h5>
+                        {% endif %}
+
+                        <div class="form-group row mb-3">
+                          <span style="color:red">* Datos obligatorios </span>  
+                        </div>
+
+                        <button type="submit" id="grabarCliente" class="btn btn-success">Grabar</button>
+                        <!-- <button type="button" id="nuevoCliente" class="btn btn-primary">Nuevo</button> -->
+                        <a class="btn btn-primary" href="{{ url_for('clientes_bp.abmClientes', id=-1) }}">Nuevo</a>
+                        {% if (cliente != []) %}
+                          <button type="button" id="borrarCliente" class="btn btn-danger">Borrar</button>
+                          <a class="btn btn-warning" id="nuevaCita" href="#">Nueva cita</a>
+                          <a class="btn btn-info" href="{{ url_for('clientes_bp.abmContrato', idCliente= cliente[0] ) }}">Nuevo contrato</a>
+                          <a class="btn btn-dark" href="{{ url_for('clientes_bp.abmEvento', idCliente= cliente[0] ) }}">Nuevo evento</a>
+                        {% else %}  
+                          <button type="button" id="borrarCliente" class="btn btn-danger disabled">Borrar</button>
+                          <a class="btn btn-warning disabled" id="nuevaCita" href="#">Nueva cita</a>
+                          <a class="btn btn-info disabled" href="{{ url_for('clientes_bp.abmContrato', idCliente= cliente[0] ) }}">Nuevo contrato</a>
+                          <a class="btn btn-dark disabled" href="{{ url_for('clientes_bp.abmEvento', idCliente= cliente[0] ) }}">Nuevo evento</a>
+                        {% endif %}  
+                        
+                    </form>
+              <!--  </div>    -->
+            <!-- </div> -->
+        </div>        
+    </div>
+
+    <div class="card shadow mb-4 col-sm-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Pagos pendientes</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm" >
+            <thead>
+              <tr>
+                <th scope="col">Cuota</th>
+                <th scope="col">Vto</th>
+                <th scope="col">Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cuota in cuotasPendientes %}
+                <tr class="">
+                  <td scope="row"> <a href="{{ url_for('ventas_bp.reciboPago', idcc=cuota[0]) }}">{{ cuota[1] }}</a></td>
+                  {% if cuota[5] == 1 %}
+                    <td style="color: red">{{ cuota[2] }} </td>
+                  {% else %}
+                    <td>{{ cuota[2] }}</td>
+                  {% endif %}            
+                  
+                  <td>{{ cuota[3] }}</td>
+                </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+        
+        
+      </div>
+    </div>  
+
+    </div>
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+        /*
+        para que el archivo se cargue correctamente, debe estar en la carpeta static
+        ya que es la adición de un archivo estatico agregado al archivo actual
+        */
+        var modalUrl = "{{ url_for('static', filename='modal-busqueda.html') }}";
+
+        $(document).ready(function() {
+          // Cargar provincias al cargar la página
+          //cargarProvincias();
+        });    
+
+        // Llamar a la función para cargar la ventana modal cuando la página esté lista
+        
+        function cargarVentanaModal() {
+            fetch(modalUrl)
+            .then(response => response.text())
+            .then(data => {
+              document.body.insertAdjacentHTML('beforeend', data);
+              // Una vez que se carga el HTML de la ventana modal, puedes inicializarla si es necesario
+              // Por ejemplo, si estás utilizando Bootstrap, podrías inicializarla con $('#resultadosModal').modal()
+            })
+            .catch(error => console.error('Error al cargar la ventana modal:', error));
+        }
+      
+        document.addEventListener('DOMContentLoaded', cargarVentanaModal);
+
+        //llamada a nueva cita
+        document.getElementById('nuevaCita').addEventListener('click', function() {
+          let idcliente = document.getElementById('idcliente').value;
+          let url = "{{ url_for('clientes_bp.abmCitas', idcliente='') }}" + idcliente;
+          window.location.href = url;
+      });
+
+        // Función para cargar provincias
+        function cargarProvincias() {
+            fetch('/provincias', {
+              method: 'GET'
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al cargar las provincias');
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Obtener el select de provincias
+              var selectProvincias = document.getElementById('provincia');
+              // Limpiar el select antes de agregar las nuevas opciones
+              selectProvincias.innerHTML = '';
+              // Recorrer las provincias obtenidas y agregarlas al select
+              let i = 0;
+              for (const provinciaId in data.provincias) {
+                var provinciaNombre = data.provincias[provinciaId];
+                var option = document.createElement('option');
+                option.value = provinciaId;
+                option.textContent = provinciaNombre;
+                selectProvincias.appendChild(option);
+                if (provinciaId === "{{ cliente[6] }}"){
+                  selectProvincias.selectedIndex = i;
+                }
+                i++;
+                
+              }
+              
+
+              
+            })
+            .catch(error => {
+              console.error('Error al cargar las provincias:', error);
+            });
+          }
+    
+          // Actualizar localidades al cambiar la provincia
+          /*
+          $('#provincia').change(function() {
+            var provinciaSeleccionada = $(this).val();
+            $.ajax({
+              url: '/localidades/' + provinciaSeleccionada,
+              type: 'GET',
+              success: function(response) {
+                // Limpiar select de localidades
+                $('#localidad').empty();
+                // Agregar opciones de localidades
+                $.each(response.localidades, function(key, value) {
+                  $('#localidad').append('<option value="' + key + '">' + value + '</option>');
+                });
+              },
+              error: function(error) {
+                console.log(error);
+              }
+            });
+          });
+          */
+    
+        // Manejo del formulario de búsqueda
+        // Función para mostrar los resultados en la ventana modal
+        function mostrarResultados(resultados) {
+            // Verificar si hay más de un resultado
+            if (resultados.cliente.length > 1) {
+                    // Obtener el elemento de la lista de resultados
+                    //alert('Se encontró mas de un resultado: ' + resultados.cliente.length);
+                    var resultadosLista = document.getElementById('resultadosLista');
+                    // Limpiar la lista antes de agregar los nuevos resultados
+                    resultadosLista.innerHTML = '';
+                    // Iterar sobre los resultados y agregar cada uno como un elemento de la lista
+                    resultados.cliente.forEach(function(resultado) {
+                        var li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = resultado[0] + ' - ' + resultado[1] + ', ' + resultado[2];
+                        li.addEventListener('click', function() {
+                        // Aquí puedes manejar la selección del resultado (por ejemplo, redirigir a una página o realizar otra acción)
+                            //alert('Seleccionaste el cliente: ' + resultado[1] + ', ' + resultado[2]);
+                            obtenerDatosCliente(resultado[0]);
+                        // Cerrar la ventana modal después de seleccionar un resultado
+                        $('#resultadosModal').modal('hide');
+                        });
+                        resultadosLista.appendChild(li);
+                    });
+                    // Mostrar la ventana modal con los resultados
+                    $('#resultadosModal').modal('show');
+                } else {
+                // Si hay un solo resultado, puedes realizar una acción directamente (por ejemplo, redirigir a una página o mostrar información)
+                obtenerDatosCliente(resultados.cliente[0]);
+                }
+            }
+  
+        function obtenerDatosCliente(idCliente){
+          window.location.href = '/abmClientes/' + idCliente;
+        }
+
+          
+        $('#searchForm').submit(function(event) {
+            event.preventDefault();
+            // Aquí puedes enviar los datos de búsqueda al servidor y procesar la respuesta
+            buscarPor = document.getElementById('searchType').value;
+            valorBusqueda = document.getElementById('searchValue').value;
+            fetch('/buscarCliente/' + buscarPor + '/' + valorBusqueda, {
+                method: 'GET'
+              })
+            .then(response=>{
+                if (!response.ok) {
+                    throw new Error('Error al cargar las provincias');
+                }
+                    return response.json();
+            })
+            .then(data =>{
+                mostrarResultados(data);
+            })  
+        });
+          
+
+    
+          
+    
+          $('#borrarCliente').click(function() {
+            // Aquí puedes enviar una solicitud al servidor para borrar el cliente actual
+          });
+    
+          $('#nuevoCliente').click(function() {
+            // Limpiar el formulario para ingresar un nuevo cliente
+            document.getElementById('idcliente').value = -1;
+            console.log(document.getElementById('idcliente').value);
+            $('#clientForm')[0].reset();
+          });
+
+        
+      </script>
+
+{% endblock js_script %}
+

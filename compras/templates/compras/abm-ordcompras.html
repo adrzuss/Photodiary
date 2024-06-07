@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">ABM de ordenes de compras</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+    </div>
+</div>
+
+<div id="mensaje-exito" class="alert alert-success" role="alert" style="display: none;"></div>
+<div id="mensaje-error" class="alert alert-danger" role="alert" style="display: none;"></div>
+
+<form method="POST" enctype="multipart/form-data" class="d-flex flex-column align-items-center" id="form-factura" onsubmit="guardarOrdenCompras(); return false;">
+    <small class=" float-start"><span style="color: red;">*</span> Los campos marcado, son obligatorios.</small>
+    <div class=" container m-3">
+        <div class="card">
+            <h5 class="card-header">Detalle de orden de compras</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label">ID Proveedor <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" name="idProveedor" id="idProveedor" placeholder="Id del proveedor">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Nombre Proveedor </label>
+                            <input type="text" class="form-control" name="nombreProveedor" id="nombreProveedor" placeholder="Nombre del proveedor" readonly>
+                        </div>    
+                    </div>    
+                </div>
+                <div class="col-4">
+                    <button type="button" onclick="buscarProveedor()" class="btn btn-primary">Agregar Proveedor</button><br><br>    
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de la orden <span style="color: red;">*</span></label>
+                        <input type="date" class="form-control" name="fechaOrden" placeholder="Fecha de la orden" value="{{ date }}" required>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </div>
+
+    <div class="container m-3">
+        <div class="card">
+            <h5 class="card-header">Detalle de la orde de compras</h5>
+            <div class="card-body">
+                <div class="row clearfix">
+                    <div class="row clearfix float-start">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_articulo">ID del Artículo:<span style="color: red;">*</span></label>
+                            <input class="form-control" type="text" id="id_articulo" name="id_articulo" required>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="button" onclick="agregarFila()" class="btn btn-primary">Agregar Artículo</button><br><br>
+                        </div>    
+                    </div>    
+                    <br>
+                    <div class="col-md-12">
+                        <!-- <table class="table table-bordered table-hover" id="tab_logic"> -->
+                        <table class="table table-bordered table-hover" id="tabla-articulos">
+                            <input type="hidden" name="item_nos" id="item_nos" value="1">
+                            <col width="10%">
+                            <col width="30%">
+                            <col width="15%">
+                            <col width="15%">
+                            <col width="10%">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"> Código </th>
+                                    <th class="text-center"> Detalle </th>
+                                    <th class="text-center"> Cantidad </th>
+                                    <th class="text-center"> Precio unit. </th>
+                                    <th class="text-center"> Acción </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se agregarán las filas dinámicamente -->
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row clearfix float-start">
+                    <div class="col-md-12">
+                        <button type="button" id="add_row" class="btn btn-primary">Nuevo artículo</button>
+                        <button type="button" id='delete_row' class="btn btn-danger">Borrar fila</button>
+                    </div>
+                </div>
+                <!-- <div class="row clearfix float-end" style="margin-top:20px">
+                    <div class="pull-right col-md-12">
+                        <table class="table table-bordered table-hover" id="tab_logic_total">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">Sub Total</th>
+                                    <td class="text-center"><input type="number" name='sub_total' placeholder='0.00'
+                                            class="form-control" id="sub_total" readonly /></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Tax</th>
+                                    <td class="text-center"><input type="number" name='advance_amount'
+                                            id="advance_amount" placeholder='0.00' class="form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Grand Total</th>
+                                    <td class="text-center"><input type="number" name='total_amount'
+                                            id="total_amount" placeholder='0.00' class="form-control" readonly />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container m-5 d-flex justify-content-center">
+        <!--
+        <button type="submit" class="btn btn-success" onclick="guardarOrdenCompras(); return false;">Generar orden de compras</button>
+        -->
+        <button type="submit" class="btn btn-success" >Generar orden de compras</button>
+    </div>
+</form>    
+
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+    <script>
+        // Funcion para buscar proveedor
+        function buscarProveedor(){
+            var idProveedor = document.getElementById('idProveedor').value;
+            idProveedor = idProveedor.padStart(8, '0');
+            console.log(idProveedor);
+            fetch('{{ url_for("compras_bp.get_proveedor", idProveedor="") }}' + idProveedor)
+                .then(response => response.json())
+                .then(
+                    data => { 
+                        console.log(data)
+                        var nombreProveedor = document.getElementById('nombreProveedor');
+                        nombreProveedor.value = data.nombreProveedor;
+
+                    }
+                )
+                .catch(error => console.error('Error al obtener los datos del proveedor:', error));
+        }
+        // Función para agregar una nueva fila a la tabla
+
+        function agregarFila() {
+            var idArticulo = document.getElementById('id_articulo').value;
+            idArticulo = idArticulo.padStart(8, '0');
+            console.log(idArticulo);
+            fetch('{{ url_for("articulos_bp.get_articulo", codigo="") }}' + idArticulo)
+                .then(response => response.json())
+                .then(data => {
+                    var table = document.getElementById('tabla-articulos');
+                    var row = table.insertRow(-1);
+                    console.log(data);
+                    row.innerHTML = `
+                        <tr id="addr0">
+                            <td>
+                                <input type="text" name='codigo' placeholder='Código'
+                                    class="form-control" required value="${idArticulo}"/>
+                            </td>
+                            <td>
+                                <input type="text" name='detalle' placeholder='Detalle'
+                                    class="form-control" required value="${data['descripcion']}"/>
+                            </td>
+                            <td>
+                                <input type="number" name='cantidad' placeholder='Cantidad'
+                                    class="form-control desc" id='item_unit' value="1" required />
+                            </td>
+                            <td>
+                                <input type="number" name='precio-unitario' placeholder='Precio unitario'
+                                    class="form-control cat" id="precio-unitario" value="${data.precio}" required />
+                            </td>
+                        </tr>
+                        <!--
+                        <td>${data.idarticulo}</td>
+                        <td>${data.detalle}</td>
+                        <td><input type="number" name="cantidad[]" required></td>
+                        <td><input type="number" name="precio_unitario[]" value="${data.idarticulo}" readonly></td>
+                        -->
+                        <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    `;
+                })
+                .catch(error => console.error('Error al obtener los detalles del artículo:', error));
+        }
+    
+        // Función para eliminar una fila de la tabla
+        function eliminarFila(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        //Funcion para grabado de la factura
+        function guardarOrdenCompras() {
+            var idProveedor = document.getElementById('idProveedor').value;
+            var items = obtenerItemsDeTabla();
+            console.log(idProveedor);
+            console.log('------------------');
+            console.log(items);
+            fetch('/guardar_ordencompras', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({idProveedor: idProveedor, items: items}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.log('dio error');
+                    throw new Error('Error al guardar la orden de compras');
+                }
+                console.log('todo ok');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success){
+                    console.log('Orden de compras guardada con éxito:', data);
+                    // Aquí puedes redirigir al usuario a una página de éxito o realizar otras acciones
+                    var mensajeExito = document.getElementById('mensaje-exito');
+                    mensajeExito.innerText = 'Orden de compras guardada con éxito';
+                    // Limpiar los campos del formulario
+                    limpiarCampos();
+                    fetch('{{ url_for("compras_bp.abmOrdCompras") }}');
+                }
+                else {
+                    console.error('Error al guardar la orden de compras:', data.message);
+                    // Mostrar mensaje de error
+                    var mensajeError = document.getElementById('mensaje-error');
+                    mensajeError.innerText = 'Error al guardar la orden de compras: ' + data.message;
+                }    
+            })
+            .catch(error => {
+                console.error('Error al guardar la orde de compras:', error);
+                var mensajeError = document.getElementById('mensaje-error');
+                mensajeError.innerText = 'Error al procesar la respuesta';
+                // Aquí puedes mostrar un mensaje de error al usuario
+            });
+        }
+        
+        //Funcion para obtener los items cargado y poder grabar la factura
+        function obtenerItemsDeTabla() {
+            var items = [];
+            var tabla = document.getElementById('tabla-articulos');
+            for (var i = 1; i < tabla.rows.length; i++) {
+                var row = tabla.rows[i];
+                var item = {
+                    descripcion: row.cells[0].innerText,
+                    cantidad: row.cells[1].querySelector('input').value,
+                    precio_unitario: row.cells[2].querySelector('input').value,
+                };
+                items.push(item);
+            }
+            return items;
+        }
+
+        // Función para limpiar los campos del formulario
+        function limpiarCampos() {
+            document.getElementById('idProveedor').value = '';
+            // Limpiar otros campos del formulario según sea necesario
+            // Limpiar la tabla de artículos
+            var tablaArticulos = document.getElementById('tabla-articulos');
+            // Eliminar todas las filas excepto la primera (encabezados)
+            while (tablaArticulos.rows.length > 1) {
+                tablaArticulos.deleteRow(1);
+            }
+        }    
+    </script>
+    
+
+{% endblock js_script %}
+

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Configuración</h6>
+        </div>
+        
+    </div>
+</div>    
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos de configuración del sistema</h6>
+        </div>
+        <form action="{{ url_for('configuracion_bp.abmConfiguracion') }}" method="post" enctype="multipart/form-data">
+            <div class="m-3">
+                <div class="form-group row">                    
+                    <div class="col-md-2 mb-3 input-group-sm">
+                        <label for='usuario' class="form-label">Usuario:</label>
+                        <input type='text' class="form-control" id='usuario' name='usuario' value="{{ datosConfig[0] }}">
+                    </div>
+                    <div class="col-md-4 mb-3 input-group-sm">    
+                        <label for='provincia' class="form-label" >Provincia: </span></label>
+                        <select name="provincia" id="provincia" class="form-control">
+                            {% for provincia in provincias %}    
+                                {% if provincia[0] == datosConfig[1] %}
+                                    <option value="{{ provincia[0] }}" selected>{{ provincia[1] }}</option>
+                                {% else %}
+                                    <option value="{{ provincia[0] }}" selected>{{ provincia[1] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-2 mb-3 input-group-sm">
+                        <label for='celular' class="form-label">Celular </span></label>
+                        <input type='text' class="form-control" id='celular' name='celular' value="{{ datosConfig[2] }}">
+                    </div>
+                </div>    
+                <div class="form-group row">                                    
+                    <div class="col-md-4 mb-3 input-group-sm">
+                        <label for='empresa' class="form-label">Empresa </span></label>
+                        <input type='text' class="form-control" id='empresa' name='empresa' value="{{ datosConfig[4] }}">
+                    </div>
+                    <div class="col-md-4 mb-3 input-group-sm">
+                        <label for='mail' class="form-label">Mail </span></label>
+                        <input type='mail' class="form-control" id='mail' name='mail' value="{{ datosConfig[3] }}">
+                    </div>
+                </div>  
+                <div class="form-group row">                    
+                    <div class="col-2 mb-3 input-group-sm">
+                        <label for='interesCuota' class="form-label">Interes cuota </span></label>
+                        <input type='text' class="form-control" id='interesCuota' name='interesCuota' value="{{ datosConfig[6] }}">
+                    </div>
+                    <div class="col-2 mb-3 input-group-sm">
+                        <label for='interesPunitorio' class="form-label">Interes punitorio </span></label>
+                        <input type='text' class="form-control" id='interesPunitorio' name='interesPunitorio' value="{{ datosConfig[7] }}">
+                    </div>
+                </div>  
+                <div class="form-group row">                    
+                    <div class="col-5 mb-3 input-group-sm">    
+                        <label for='controlProductos' class="form-label" >Control de productos: </span></label>
+                        {% if datosConfig[5] == 'S' %}
+                            <input type="checkbox" class="ml-3 form-check-input" id='controlProductos' name='controlProductos' value="{{ datosConfig[5] }}" checked>
+                        {% else %}    
+                            <input type="checkbox" class="ml-3 form-check-input" id='controlProductos' name='controlProductos' value="{{ datosConfig[5] }}" unchecked>
+                        {% endif %}    
+                    </div>
+                </div>  
+                <div class="form-group row">                    
+                    <div class="col-md-4 mb-3 input-group-sm">
+                        {% if img_logo != None %}
+                            <label for="logo" class="form-label">Tu logo (Hay un logo cargado)</label>    
+                        {% else %}    
+                            <label for="logo" class="form-label">Tu logo</label>    
+                        {% endif %}    
+                        <input class="form-control" type="file" id="logo" name="logo" accept="image/*">
+                    </div>
+                
+                    <div class="col-md-4 mb-3 input-group-sm">
+                        {% if img_logo != None %}
+                            <label for="logo" class="form-label">Tu modelo de recibo (Hay un recibo cargado)</label>    
+                        {% else %}    
+                            <label for="logo" class="form-label">Tu modelo de recibo</label>    
+                        {% endif %}    
+                        <input class="form-control" type="file" id="recibo" name="recibo" accept=".pdf">
+                    </div>
+                </div>  
+                <div class="form-group row">                    
+                    <button type="submit" class="ml-3 btn btn-success">Grabar</button>
+                </div>  
+            </div>
+        </form>    
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+    
+{% endblock js_script %}
+

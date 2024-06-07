@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+
+    <!-- 404 Error Text -->
+    <div class="text-center">
+        <div class="error mx-auto" data-text="EnConstruccion">En construcción</div>
+        <p class="lead text-gray-800 mb-5">Página en construcción</p>
+        <p class="text-gray-500 mb-0">Pronto podrá ver los datos y/o funciones de esta página</p>
+        <a href="{{ url_for('tablero') }}">&larr; Volver al tablero</a>
+    </div>
+
+</div>
+
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+{% endblock js_script %}
+

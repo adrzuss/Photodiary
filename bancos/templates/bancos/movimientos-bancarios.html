@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Citas del periodo</h6>
+        </div>
+        <div class="card-body">
+                    <form id="searchForm">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="banco" class="form-label">Cuenta bancaria o billetera</label>
+                                <select name="banco" id="banco" name="banco" class="form-control">
+                                    {% for cuenta in cuentasBancarias %}
+                                      <option value="{{ cuenta[0] }}">{{ cuenta[1] }}</option>
+                                    {% endfor %}  
+                                </select>
+
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="desde" class="form-label">Desde</label>
+                                <input type="date" id="desde" name="desde" class="form-control" value="{{ desde }}">
+                            </div>    
+                            <div class="col-md-2 mb-3">
+                                <label for="hasta" class="form-label">Hasta</label>
+                                <input type="date" id="hasta" name="hasta" class="form-control" value="{{ hasta }}">
+                            </div>    
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+                </div>    
+    </div>
+</div>    
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Movimientos bancarios y de billeteras</h6>
+        </div>
+    
+        <div class="m-3">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm" id="dataTable" width="100%" cellspacing="0">
+                <colgroup span="1" style="background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(200, 100, 0, 0.3);"></colgroup>
+                <colgroup span="3" style="background: rgba(61, 183, 61, 0.15); border: 1px solid rgba(100, 200, 0, 0.3);"></colgroup>
+                <colgroup span="1" style="background: rgba(129, 86, 248, 0.15); border: 1px solid rgba(175, 155, 248, 0.3)"></colgroup>
+                <colgroup span="1" style="background: rgba(245, 40, 40, 0.15); border: 1px solid rgba(209, 88, 94, 0.3)"></colgroup>
+
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Día</th>
+                        <th>Tipo</th>
+                        <th>Detalle</th>
+                        <th>Débito</th>
+                        <th>Crédito</th>
+                    </tr>
+                </thead>
+                <tfoot class="thead-dark">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Día</th>
+                        <th>Tipo</th>
+                        <th>Detalle</th>
+                        <th>Débito</th>
+                        <th>Crédito</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for movimiento in movimientos %}
+                        <tr>
+                        <td> {{ movimiento[0] }} </td>   
+                        <td>{{ movimiento[1] }}</td>
+                        <td>{{ movimiento[4] }}</td>
+                        <td>{{ movimiento[5] }}</td>
+                        <td style = 'text-align:right'> {{ movimiento[2] }} </td>
+                        <td style = 'text-align:right'> {{ movimiento[3] }} </td>
+                        </tr>
+                    {% endfor %}  
+                </tbody>
+            </table>
+        </div>
+
+        </div>
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+    
+{% endblock js_script %}
+

@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Productos</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+    </div>
+    <div class="row">
+        <div class="col-5 card shadow mb-4 mr-5">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Productos activos</h6>
+            </div>
+            <div class="card-body">
+                <div class='input-group mb-3'>
+                    <div class='input-group mb-3'>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Código</th>
+                                    <th>Detalle</th>
+                                    <th>Accion</th>
+                                </tr>
+                            </thead>    
+                            <tbody>
+                                {% for producto in productos %}
+                                    <tr>
+                                        <td>{{ producto[0] }}</td>
+                                        <td>{{ producto[1] }}</td>
+                                        <td>{{ producto[2] }}</td>
+                                        <td> <a class="btn btn-info" href="{{ url_for('productos_bp.abmProductos', idProducto = producto[0]) }}">Editar</a> </td>
+                                    </tr>
+                                {% endfor %}    
+                            </tbody>
+    
+                        </table>
+                    </div>        
+                </div>        
+            </div>
+        </div>        
+        <div class="col-6 card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detalle de artículos</h6>
+            </div>
+            <div class="card-body">
+                <!-- <div class='input-group mb-3'> -->
+                    <!-- <div class='input-group-prepend'> -->
+                        <form action="{{ url_for('productos_bp.abmProductos') }}" method='POST'>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for='idProducto' class="form-label"># Producto:</label>
+                                    <input type='text' class="form-control" id='idProducto' name='idProducto' value="{{ producto[0] }}" readonly>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for='codigo' class="form-label">Codigo:</label>
+                                    <input type='text' class="form-control" id='codigo' name='codigo' value="{{ producto[1] }}">
+                                </div>
+                            </div>    
+                            <div class="form-group row">
+                                <div class="col-md-6">    
+                                    <label for='grupo' class="form-label" >Rubro:</label>
+                                    <select id="grupo" name="grupo" class="form-control" required value ="{{ producto[2] }}"">
+                                        <option value="" selected disabled>Seleccione un grupo</option>
+                                        {% for grupo in grupos%}
+                                            {% if producto[2] == grupo[0] %}
+                                                <option selected value="{{ grupo[0] }}">{{ grupo[1] }}</option>
+                                            {% else %}    
+                                                <option value="{{ grupo[0] }}">{{ grupo[1] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for='marca' class="form-label">Marca:</label>
+                                    <select id="marca" name="marca" class="form-control" required >
+                                        <option value="" selected disabled>Seleccione una marca</option>
+                                        {% for marca in marcas%}
+                                            {% if producto[3] == marca[0] %}
+                                                <option selected value="{{ marca[0] }}">{{ marca[1] }}</option>
+                                            {% else %}
+                                                <option value="{{ marca[0] }}">{{ marca[1] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">    
+                                    <label for='detalle' class="form-label">Detalle:</label>
+                                    <input type='text' class="form-control" id='detalle' name='detalle' value="{{ producto[4] }}">
+                                </div>
+                            </div>        
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for='costo' class="form-label">Costo:</label>
+                                    <input type='text' class="form-control" id='costo' name='costo' value="{{ producto[5] }}">
+                                </div>    
+                                
+                                <div class="col-md-4">
+                                    <label for='precio' class="form-label">Precio VP:</label>
+                                    <input type='number' class="form-control" id='precio' name='precio' value="{{ producto[6] }}">
+                                </div>    
+                            </div>    
+                            <div class="form-group row">
+                                <div class="col-md-4 form-check">
+                                    <label for='enDolares' class="form-check-label">Precio en dolares:</label>
+                                    {% if producto[7] == 'S' %}
+                                        <input type="checkbox" class="ml-3 form-check-input" id='enDolares' name='enDolares' value="{{ producto[7] }}" checked>
+                                    {% else %}    
+                                        <input type="checkbox" class="ml-3 form-check-input" id='enDolares' name='enDolares' value="{{ producto[7] }}" unchecked>
+                                    {% endif %}    
+                                </div>
+                                <div class="col-md-4">
+                                    <label for='precioDolar' class="form-label">Precio Dolar:</label>
+                                    <input type='number' class="form-control" id='precioDolar' name='precioDolar' value="{{ producto[8] }}">
+                                </div>    
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6 form-check">
+                                    <label for='esServicio' class="form-check-label">Es un servicio:</label>
+                                    {% if producto[9] == 'S' %}
+                                        <input type="checkbox" class="ml-3 form-check-input" id='esServicio' name='esServicio' value="{{ producto[9] }}" checked>
+                                    {% else %}    
+                                        <input type="checkbox" class="ml-3 form-check-input" id='esServicio' name='esServicio' value="{{ producto[9] }}" unchecked>
+                                    {% endif %}    
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for='alta' class="form-label">Alta:</label>
+                                    <input type='text' class="form-control" id='alta' name='alta' value="{{ producto[10] }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for='baja' class="form-label">Baja:</label>
+                                    <input type='text' class="form-control" id='baja' name='baja' value="{{ producto[11] }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <a href="{{ url_for('productos_bp.abmProductos', idProducto = -1) }}" class="btn btn-primary ml-4 btn-icon-split ml-4">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-file"></i>
+                                    </span>
+                                    <span class="text">Nuevo</span>
+                                </a>
+
+                                <button type='submit' class='btn btn-success btn-icon-split ml-4'> 
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-sd-card"></i>
+                                    </span>
+                                    <span class="text">Grabar</span>
+                                </button>
+
+                                <a href="#" class="btn btn-danger ml-4 btn-icon-split ml-4">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                    <span class="text">Borrar</span>
+                                </a>
+                            </div>    
+                            
+                        </form>
+                    <!-- </div>    -->
+                <!-- </div> -->
+            </div>        
+        </div>
+    </div>    
+</div>
+
+
+<!-- Content Row -->
+
+{% endblock contenido %}
+
+{% block js_script %}
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
+{% endblock js_script %}
+
